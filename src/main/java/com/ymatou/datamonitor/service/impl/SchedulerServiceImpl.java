@@ -30,6 +30,7 @@ public class SchedulerServiceImpl implements SchedulerService{
     @Autowired
     private Scheduler scheduler;
 
+    @Autowired
     public void addJob(Class<? extends Job> job, String jobName, String cronExpression) throws SchedulerException {
         JobDetail jobDetail = JobBuilder.newJob(job)
                 .withIdentity(jobName)
@@ -41,7 +42,8 @@ public class SchedulerServiceImpl implements SchedulerService{
                 .build();
         scheduler.scheduleJob(jobDetail, trigger);
     }
-  
+    
+    @Autowired
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void modifyScheduler(String jobName, String cronExpression) throws SchedulerException {
         // 获取job的原trigger
@@ -55,14 +57,17 @@ public class SchedulerServiceImpl implements SchedulerService{
         scheduler.rescheduleJob(oldTrigger.getKey(), newTrigger);
     }
     
+    @Autowired
     public void pauseScheduler(String jobName) throws SchedulerException{
         scheduler.pauseJob(new JobKey(jobName));
     }
     
+    @Autowired
     public void resumeScheduler(String jobName) throws SchedulerException{
         scheduler.resumeJob(new JobKey(jobName));
     }
     
+    @Autowired
     public void removeScheduler(String jobName) throws SchedulerException{
         scheduler.deleteJob(new JobKey(jobName));
     }

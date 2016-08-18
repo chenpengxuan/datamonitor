@@ -103,6 +103,7 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     compile "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+    compile("org.springframework:spring-context-support")
     
     compile "org.quartz-scheduler:quartz:${quartzVersion}"
 

@@ -3,11 +3,23 @@
  */
 package com.ymatou.datamonitor.service;
 
+import org.quartz.Job;
+import org.quartz.SchedulerException;
+
 /**
  * 
  * @author qianmin 2016年8月18日 下午3:03:48
  *
  */
 public interface SchedulerService {
+    
+    void addJob(Class<? extends Job> job, String jobName, String cronExpression) throws SchedulerException;
 
+    void modifyScheduler(String jobName, String cronExpression) throws SchedulerException;
+
+    void pauseScheduler(String jobName) throws SchedulerException;
+
+    void resumeScheduler(String jobName) throws SchedulerException;
+
+    void removeScheduler(String jobName) throws SchedulerException;
 }
