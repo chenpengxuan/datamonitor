@@ -1,0 +1,134 @@
+<!--
+  ~ /*
+  ~  (C) Copyright 2016 Ymatou (http://www.ymatou.com/).
+  ~  All rights reserved.
+  ~  */
+  -->
+
+<div class="widgets" ng-controller="funcSubmitCtrl">
+
+
+    <div panel panel-primary contextual-example-panel bootstrap-panel ba-panel >
+        <div class="panel-heading">详情</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">URL:</label>
+                <div class="col-sm-10">
+                    <input class="form-control" ng-model="functionVo.url" id="url"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">提交方式:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="functionVo.httpMethod" id="httpMethod" >
+                        <option value="POST">POST</option>
+                        <option value="GET">GET</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label" >内容类型:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="functionVo.contentType" id="contentType" >
+                        <option value="application/json">application/json</option>
+                        <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ba-panel ba-panel-title="参数设置" ba-panel-class="with-scroll">
+
+        <div class="add-row-editable-table">
+            <button class="btn btn-primary" ng-click="addParam()">Add row</button> （如是数组 则值自行使用逗号[,]分隔）
+        </div>
+        <table class="table table-bordered table-hover table-condensed">
+            <tr>
+                <td>参数名称(eg: orderId)</td>
+                <td>值</td>
+                <td>类型</td>
+                <td>格式</td>
+                <td>数组</td>
+                <td>操作</td>
+            </tr>
+            <tr ng-repeat="funcParam in functionVo.functionParams" class="editable-row">
+                <td>
+                    <span editable-text="funcParam.paramName" e-name="paramName" e-form="rowform" e-required>
+                      {{ funcParam.paramName || '' }}
+                    </span>
+                </td>
+                <td>
+                    <span editable-text="funcParam.value" e-name="value" e-form="rowform">
+                      {{ funcParam.value || '' }}
+                    </span>
+                </td>
+                <td class="select-td">
+                    <span editable-select="funcParam.type" e-name="type" e-form="rowform" e-selectpicker
+                          e-ng-options="s.value as s.text for s in paramTypes">
+                      {{ showParamTypes(funcParam) }}
+                    </span>
+                </td>
+                <td>
+                    <span editable-text="funcParam.format" e-name="format" e-form="rowform">
+                      {{ funcParam.format || '' }}
+                    </span>
+                </td>
+                <td class="select-td">
+                    <span editable-select="funcParam.array" e-name="array" e-form="rowform" e-selectpicker
+                          e-ng-options="s.value as s.text for s in arrays">
+                      {{ showIsArray(funcParam) }}
+                    </span>
+                </td>
+                <td>
+                    <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline"
+                          shown="inserted == funcParam">
+                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary editable-table-button btn-xs">
+                            Save
+                        </button>
+                        <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default editable-table-button btn-xs">
+                            Cancel
+                        </button>
+                    </form>
+                    <div class="buttons" ng-show="!rowform.$visible">
+                        <button class="btn btn-primary editable-table-button btn-xs" ng-click="rowform.$show()">Edit</button>
+                        <button class="btn btn-danger editable-table-button btn-xs" ng-click="removeParam($index)">Delete</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+
+    <uib-accordion>
+        <uib-accordion-group heading="JSON body" panel-class="panel-primary bootstrap-panel accordion-panel">
+            <button class="btn btn-primary" ng-click="prettify()">校验并格式化</button>
+            <textarea class="form-control" style="height: 300px;" ng-model="functionVo.jsonBody"></textarea>
+        </uib-accordion-group>
+    </uib-accordion>
+
+    <div class="form-group" style="text-align:center;margin-top:30px;">
+        <button type="button" ng-click="submit()" class="btn btn-primary btn-lg ">发送</button>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-6">
+            <uib-accordion>
+                <uib-accordion-group heading="REQUEST" id="request" panel-class="panel-primary bootstrap-panel accordion-panel">
+                    <!--<json-formatter json="functionVo.requestStr"></json-formatter>-->
+                    <div id="requestCanvas" class="Canvas">
+                        {{functionVo.requestStr}}
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+        </div>
+        <div class="col-sm-6">
+            <uib-accordion>
+                <uib-accordion-group heading="RESPONSE" id="response" panel-class="panel-primary bootstrap-panel accordion-panel">
+                    <!--<json-formatter json="functionVo.responseStr"></json-formatter>-->
+                    <div id="responseCanvas" class="Canvas">
+                        {{functionVo.responseStr}}
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+        </div>
+    </div>
+
+</div>

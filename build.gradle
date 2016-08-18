@@ -1,0 +1,139 @@
+group "com.ymatou"
+version "1.0"
+
+buildscript {
+    repositories {
+        // NOTE: You should declare only repositories that you need here
+        mavenLocal()
+        mavenCentral()
+        maven { url "http://172.16.100.98/nexus/content/groups/public/"}
+        maven { url "http://repo.spring.io/release" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/snapshot" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
+        classpath "org.springframework:springloaded:1.2.3.RELEASE"
+    }
+}
+
+apply plugin: "java"
+apply plugin: "idea"
+apply plugin: "spring-boot"
+apply plugin: "maven"
+apply plugin: "eclipse-wtp"
+
+
+springBoot {
+    executable = true
+    mainClass = "com.ymatou.datamonitor.Application"
+}
+
+jar {
+    baseName = "datamonitor"
+    exclude('application.properties')
+}
+
+ext {
+    springBootVersion = "1.3.6.RELEASE"
+    mybatisVersion = "3.2.8"
+    mybatisSpringVersion = "1.2.2"
+    fastJsonVersion = "1.2.6"
+    druidVersion = "1.0.14"
+    httpClientVersion = "4.3.5"
+    mysqlVersion = "5.1.6"
+    jtdsVersion = "1.3.1"
+    jacksonVersion = "2.4.6"
+    apacheCommonVersion = "3.4"
+    snakeyamlVersion = "1.2.4.RELEASE"
+    shiroVersion = "1.2.3"
+    guavaVersion = "19.0"
+    rxJavaVersion = "1.1.9"
+    rxJavaJdbcVersion = "0.7.2"
+    junitVersion = "4.11"
+}
+
+configurations {
+
+    compile.exclude group: "org.eclipse.jetty.websocket"
+    compile.exclude group: "org.yaml"
+    compile.exclude module:"c3p0"
+}
+
+repositories {
+
+    mavenLocal()
+    maven { url "http://172.16.100.98/nexus/content/groups/public/"}
+    maven { url "http://repo.spring.io/release" }
+    maven { url "http://repo.spring.io/milestone" }
+    maven { url "http://repo.spring.io/snapshot" }
+    mavenCentral()
+
+}
+
+dependencies {
+    compile "io.reactivex:rxjava:${rxJavaVersion}"
+    compile "com.github.davidmoten:rxjava-jdbc:${rxJavaJdbcVersion}"
+    compile "com.google.guava:guava:${guavaVersion}"
+	compile "com.alibaba:druid:${druidVersion}"
+	compile "org.apache.httpcomponents:httpclient:${httpClientVersion}"
+	compile "org.apache.httpcomponents:httpmime:${httpClientVersion}"
+
+    compile "org.apache.shiro:shiro-core:${shiroVersion}"
+    compile "org.apache.shiro:shiro-spring:${shiroVersion}"
+    compile "org.apache.shiro:shiro-web:${shiroVersion}"
+
+    compile "mysql:mysql-connector-java:${mysqlVersion}"
+    compile "net.sourceforge.jtds:jtds:${jtdsVersion}"
+    compile "com.alibaba:fastjson:${fastJsonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+    compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+    compile "org.apache.commons:commons-lang3:${apacheCommonVersion}"
+
+	compile "org.yaml:snakeyaml:${snakeyamlVersion}"
+
+    compile "org.mybatis:mybatis:${mybatisVersion}"
+    compile "org.mybatis:mybatis-spring:${mybatisSpringVersion}"
+    compile "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+
+	compile "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
+	compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+
+    compile "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile group: "junit", name: "junit", version: "${junitVersion}"
+
+}
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.4"
+}
+
+//复制启动，停止脚本
+task copyScript(type: Copy) {
+    into "$buildDir/dist"
+    from "$projectDir/script"
+}
+
+//复制jar
+task copyJars(type: Copy,dependsOn:jar) {
+    from configurations.runtime  //项目所有的jar依赖
+    from "$buildDir/libs"        //本项目jar
+    into "$buildDir/dist/lib"
+}
+
+//复制配置
+task copyConfig(type: Copy){
+    from "$projectDir/src/main/resources/application.properties"
+    into "$buildDir/dist/conf"
+}
+
+//打包发布 发布为：gradle release 默认位置为：build/distributions
+task release(type: Zip,dependsOn:[copyScript,copyJars,copyConfig]) {
+    archiveName="datamonitor.zip"
+    from "$buildDir/dist"
+}

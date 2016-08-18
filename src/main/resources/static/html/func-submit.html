@@ -1,0 +1,93 @@
+<!--
+  ~ /*
+  ~  (C) Copyright 2016 Ymatou (http://www.ymatou.com/).
+  ~  All rights reserved.
+  ~  */
+  -->
+
+<div class="widgets" ng-controller="funcSubmitCtrl">
+
+
+    <div panel panel-primary contextual-example-panel bootstrap-panel ba-panel >
+        <div class="panel-heading">功能详情</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">名称:</label>
+                <div class="col-sm-4">
+                    <input class="form-control" ng-model="functionVo.name" id="name" readonly/>
+                </div>
+                <label class="col-sm-2 control-label">URL:</label>
+                <div class="col-sm-4">
+                    <input class="form-control" ng-model="functionVo.url" id="url"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">提交方式:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="functionVo.httpMethod" id="httpMethod" >
+                        <option value="POST">POST</option>
+                        <option value="GET">GET</option>
+                    </select>
+                </div>
+                <label class="col-sm-2 control-label" >内容类型:</label>
+                <div class="col-sm-4">
+                    <select class="form-control" ng-model="functionVo.contentType" id="contentType" >
+                        <option value="application/json">application/json</option>
+                        <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="description">功能描述</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="description" ng-model="functionVo.description"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ba-panel ba-panel-title="功能参数设置" ba-panel-class="with-scroll">
+        <div class="form-group" ng-repeat="funcParam in functionVo.functionParams">
+            <label class="col-sm-2">{{funcParam.name}} [{{funcParam.paramName}}]</label>
+            <div class="col-sm-10" >
+                <input class="form-control" ng-if="!funcParam.array" type="text" ng-model="funcParam.value"/>
+                <input type="text" tag-input="primary" ng-if="funcParam.array" ng-model="funcParam.value"  data-role="tagsinput">
+            </div>
+        </div>
+    </div>
+
+
+    <uib-accordion>
+        <uib-accordion-group heading="JSON body" panel-class="panel-primary bootstrap-panel accordion-panel">
+            <button class="btn btn-primary" ng-click="prettify()">校验并格式化</button>
+            <textarea class="form-control" style="height: 300px;" ng-model="functionVo.jsonBody"></textarea>
+        </uib-accordion-group>
+    </uib-accordion>
+
+    <div class="form-group" style="text-align:center;margin-top:30px;">
+        <button type="button" ng-click="submit()" class="btn btn-primary btn-lg ">发送</button>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-6">
+            <uib-accordion>
+                <uib-accordion-group heading="REQUEST" id="request" panel-class="panel-primary bootstrap-panel accordion-panel">
+                    <!--<json-formatter json="functionVo.requestStr"></json-formatter>-->
+                    <div id="requestCanvas" class="Canvas">
+                        {{functionVo.requestStr}}
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+        </div>
+        <div class="col-sm-6">
+            <uib-accordion>
+                <uib-accordion-group heading="RESPONSE" id="response" panel-class="panel-primary bootstrap-panel accordion-panel">
+                    <!--<json-formatter json="functionVo.responseStr"></json-formatter>-->
+                    <div id="responseCanvas" class="Canvas">
+                        {{functionVo.responseStr}}
+                    </div>
+                </uib-accordion-group>
+            </uib-accordion>
+        </div>
+    </div>
+
+</div>

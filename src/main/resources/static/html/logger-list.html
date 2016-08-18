@@ -1,0 +1,73 @@
+<!--
+  ~ /*
+  ~  (C) Copyright 2016 Ymatou (http://www.ymatou.com/).
+  ~  All rights reserved.
+  ~  */
+  -->
+
+<div class="widgets">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div ba-panel ba-panel-title="操作日志列表" ba-panel-class="with-scroll">
+        <div style="padding-bottom:20px;">
+          <form novalidate>
+              <pre style="padding-top: 10px;white-space: nowrap">
+                  功能名称<input name="name" type="text" ng-model="logger.functionName">
+                  &nbsp;&nbsp;应用名称
+                <select ng-model="logger.applicationId">
+                  <option value="">----请选择----</option>
+                  <option ng-repeat="s in applications" value="{{s.id}}">{{s.name}}</option>
+                </select>
+                  &nbsp;&nbsp;操作员<input name="userName" type="text" ng-model="logger.userName">
+                  &nbsp;&nbsp;起始时间<input class="laydate-icon" id="startTime" name="startTime" ng-model="logger.startTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                  &nbsp;&nbsp;结束时间<input class="laydate-icon" id="endTime" name="endTime" ng-model="logger.endTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                 <!-- 角色名称
+                  <select name="roleId" ng-model="user.roleId">
+                    <option value="">&#45;&#45;请选择&#45;&#45;</option>
+                    <option ng-repeat="r in roles" value="{{r.id}}">{{r.roleName}}</option>
+                  </select>-->
+                  <button class="btn btn-primary btn-large" ng-click="search()">查询</button>
+              </pre>
+          </form>
+        </div>
+        <div class="horizontal-scroll">
+          <table class="table">
+            <thead>
+            <tr>
+              <th class="table-id" >#</th>
+              <th>操作员</th>
+              <th>功能名称</th>
+              <th>应用名称</th>
+              <th>操作时间</th>
+              <th>请求报文</th>
+              <th>应答报文</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in loggerList">
+              <td class="table-id">{{item.id}}</td>
+              <td>{{item.userName}}</td>
+              <td>{{item.functionName}}</td>
+              <td>{{item.appName}}</td>
+              <td>{{item.operateTime}}</td>
+              <td title="{{item.request}}">{{item.request |limit:100}}</td>
+              <td title="{{item.response}}">{{item.response |limit:100}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <paging
+                  page="page"
+                  page-size="pageSize"
+                  total="total"
+                  show-prev-next="true"
+                  show-first-last="true"
+                  scroll-top="true"
+                  paging-action="pagingAction(page, pageSize,total)"
+                  ></paging>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
