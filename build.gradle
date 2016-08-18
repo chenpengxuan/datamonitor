@@ -51,6 +51,7 @@ ext {
     rxJavaVersion = "1.1.9"
     rxJavaJdbcVersion = "0.7.2"
     junitVersion = "4.11"
+    quartzVersion = "2.2.3"
 }
 
 configurations {
@@ -102,6 +103,8 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     compile "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
+    
+    compile "org.quartz-scheduler:quartz:${quartzVersion}"
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile group: "junit", name: "junit", version: "${junitVersion}"
