@@ -9,6 +9,7 @@ package com.ymatou.datamonitor.dbtest;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.druid.sql.PagerUtils;
 import org.junit.Test;
 
 import com.alibaba.druid.pool.DruidDataSource;
@@ -94,5 +95,23 @@ public class DbTest {
     }
 
 
+    @Test
+    public void PageTest(){
+
+        String sqlSqlserver = PagerUtils.count("select * from ymt_orders order by daddtime desc",DbEnum.sqlserver.name());
+        String sqlMysql = PagerUtils.count("select * from ymt_orders order by daddtime desc",DbEnum.mysql.name());
+
+        System.out.println(sqlSqlserver);
+        System.out.println(sqlMysql);
+
+
+        String sqlSqlserver1 = PagerUtils.limit("select top 100 * from ymt_orders order by daddtime desc",DbEnum.sqlserver.name(),0,1000);
+        String sqlMysql1 = PagerUtils.limit("select * from ymt_orders order by daddtime desc",DbEnum.mysql.name(),0,1000);
+
+        System.out.println(sqlSqlserver1);
+        System.out.println(sqlMysql1);
+
+
+    }
 
 }

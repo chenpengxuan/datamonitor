@@ -28,7 +28,7 @@ public class MonitorDataSourceConfig {
     @Bean(name = "ymtReleaseDataSource")
     public DataSource ymtReleaseDataSource() {
 
-        DruidDataSource dataSource = newDataSource(connectionConfig.getYmtRelease(), DbEnum.sqlserver);
+        DruidDataSource dataSource = newDataSource(connectionConfig.getYmtRelease(), DataSourceEnum.ymtRelease.getDbEnum());
 
         DbUtil.addDataBase(DataSourceEnum.ymtRelease, dataSource);
         return dataSource;

@@ -28,8 +28,8 @@ public class Monitor extends Audit{
     @Column(name = "name")
     protected String name;
     
-    @Column(name = "db_source_id")
-    protected Long dbSourceId;
+    @Column(name = "db_source")
+    protected String dbSource;
     
     @Column(name = "sql")
     protected String sql;
@@ -86,12 +86,12 @@ public class Monitor extends Audit{
         this.name = name;
     }
 
-    public Long getDbSourceId() {
-        return dbSourceId;
+    public String getDbSource() {
+        return dbSource;
     }
 
-    public void setDbSourceId(Long dbSourceId) {
-        this.dbSourceId = dbSourceId;
+    public void setDbSource(String dbSource) {
+        this.dbSource = dbSource;
     }
 
     public String getSql() {

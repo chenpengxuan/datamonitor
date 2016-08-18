@@ -12,6 +12,17 @@ package com.ymatou.datamonitor.model;
  */
 public enum DataSourceEnum {
 
-    ymtRelease
+    ymtRelease(DbEnum.sqlserver)
+    ;
+    DbEnum dbEnum;
+
+    DataSourceEnum(DbEnum dbEnum) {
+        this.dbEnum = dbEnum;
+    }
+
+    public DbEnum getDbEnum() {
+        return dbEnum;
+    }
+
 
 }

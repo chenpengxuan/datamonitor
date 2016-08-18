@@ -16,7 +16,7 @@ public class MonitorVo {
 
     private Long id;
     private String name;
-    private Long dbSourceId;
+    private String dbSource;
     private String sql;
     private String cronExpression;
     private String scriptType;
@@ -56,12 +56,12 @@ public class MonitorVo {
         this.name = name;
     }
 
-    public Long getDbSourceId() {
-        return dbSourceId;
+    public String getDbSource() {
+        return dbSource;
     }
 
-    public void setDbSourceId(Long dbSourceId) {
-        this.dbSourceId = dbSourceId;
+    public void setDbSource(String dbSource) {
+        this.dbSource = dbSource;
     }
 
     public String getSql() {
@@ -207,4 +207,5 @@ public class MonitorVo {
     public void setNextFireTime(Date nextFireTime) {
         this.nextFireTime = nextFireTime;
     }
+
 }
