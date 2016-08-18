@@ -3,6 +3,7 @@
  */
 package com.ymatou.datamonitor.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.quartz.CronScheduleBuilder;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ymatou.datamonitor.service.SchedulerService;
-
 /**
  * 
  * @author qianmin 2016年8月18日 下午3:04:02
@@ -70,5 +70,12 @@ public class SchedulerServiceImpl implements SchedulerService{
     @Autowired
     public void removeScheduler(String jobName) throws SchedulerException{
         scheduler.deleteJob(new JobKey(jobName));
+    }
+    
+    @Override
+    public Date getNextFireTime(String jobName) throws SchedulerException {
+        List<? extends Trigger> triggerList = scheduler.getTriggersOfJob(new JobKey(jobName));
+        Trigger oldTrigger = triggerList.get(0);
+        return oldTrigger.getNextFireTime();
     }
 }

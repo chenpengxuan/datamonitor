@@ -3,13 +3,17 @@
  */
 package com.ymatou.datamonitor.model.vo;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 /**
  * 
  * @author qianmin 2016年8月18日 下午2:26:25
  *
  */
 public class MonitorVo {
-    
+
     private Long id;
     private String name;
     private Long dbSourceId;
@@ -24,6 +28,17 @@ public class MonitorVo {
     private String remark;
     private String runStatus;
     private String title;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date updateTime;
+    private String createUser;
+    private String updateUser;
+    private String status;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date lastFireTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date nextFireTime;
 
     public Long getId() {
         return id;
@@ -135,5 +150,61 @@ public class MonitorVo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
+
+    public String getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(String updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Date getLastFireTime() {
+        return lastFireTime;
+    }
+
+    public void setLastFireTime(Date lastFireTime) {
+        this.lastFireTime = lastFireTime;
+    }
+
+    public Date getNextFireTime() {
+        return nextFireTime;
+    }
+
+    public void setNextFireTime(Date nextFireTime) {
+        this.nextFireTime = nextFireTime;
     }
 }

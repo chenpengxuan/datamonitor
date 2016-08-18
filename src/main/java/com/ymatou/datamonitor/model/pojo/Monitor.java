@@ -3,6 +3,8 @@
  */
 package com.ymatou.datamonitor.model.pojo;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,6 +63,12 @@ public class Monitor extends Audit{
     
     @Column(name = "title")
     protected String title;
+    
+    @Column(name = "last_fire_time")
+    private Date lastFireTime;
+    
+    @Column(name = "next_fire_time")
+    private Date nextFireTime;
 
     public Long getId() {
         return id;
@@ -172,5 +180,21 @@ public class Monitor extends Audit{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Date getLastFireTime() {
+        return lastFireTime;
+    }
+
+    public void setLastFireTime(Date lastFireTime) {
+        this.lastFireTime = lastFireTime;
+    }
+
+    public Date getNextFireTime() {
+        return nextFireTime;
+    }
+
+    public void setNextFireTime(Date nextFireTime) {
+        this.nextFireTime = nextFireTime;
     }
 }

@@ -3,6 +3,8 @@
  */
 package com.ymatou.datamonitor.service;
 
+import java.util.Date;
+
 import org.quartz.Job;
 import org.quartz.SchedulerException;
 
@@ -22,4 +24,6 @@ public interface SchedulerService {
     void resumeScheduler(String jobName) throws SchedulerException;
 
     void removeScheduler(String jobName) throws SchedulerException;
+    
+    Date getNextFireTime(String jobName) throws SchedulerException;
 }
