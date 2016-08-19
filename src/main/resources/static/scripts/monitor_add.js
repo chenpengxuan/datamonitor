@@ -12,11 +12,11 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages.app')
-      .controller('funcAddCtrl', funcAddCtrl);
+  angular.module('BlurAdmin.pages.monitor')
+      .controller('monitorAddCtrl', monitorAddCtrl);
 
   /** @ngInject */
-  function funcAddCtrl($scope,$stateParams,$state,$http,$location, editableOptions, editableThemes,$filter) {
+  function monitorAddCtrl($scope,$stateParams,$state,$http,$location, editableOptions, editableThemes,$filter) {
 
     $scope.functionVo = {
       httpMethod:'POST',

@@ -5,6 +5,13 @@ package com.ymatou.datamonitor.service.impl;
 
 import javax.transaction.Transactional;
 
+import com.alibaba.druid.sql.PagerUtils;
+import com.github.davidmoten.rx.jdbc.Database;
+import com.ymatou.datamonitor.config.DbUtil;
+import com.ymatou.datamonitor.model.DataSourceEnum;
+import com.ymatou.datamonitor.model.DbEnum;
+import com.ymatou.datamonitor.service.ExecLogService;
+import com.ymatou.datamonitor.util.MapResultSet;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +30,9 @@ import com.ymatou.datamonitor.model.pojo.Monitor;
 import com.ymatou.datamonitor.model.vo.MonitorVo;
 import com.ymatou.datamonitor.service.MonitorService;
 import com.ymatou.datamonitor.service.SchedulerService;
+
+import java.util.List;
+import java.util.Map;
 
 import static com.ymatou.datamonitor.util.Constants.JOB_SPEC;
 
@@ -43,7 +53,9 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     
     @Autowired
     private SchedulerService schedulerService;
-    
+    @Autowired
+    private ExecLogService execLogService;
+
     @Autowired
     public MonitorServiceImpl(MonitorRepository monitorRepository) {
         super(monitorRepository);
@@ -121,9 +133,32 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     }
 
     @Override
-    public void runNow(MonitorVo monitorVo) {
-        // TODO Auto-generated method stub
-        
+    public void runNow(MonitorVo monitor) {
+        Database db = DbUtil.getDb(monitor.getDbSource());
+
+        //处理sql 等
+        DataSourceEnum dataSourceEnum = DataSourceEnum.valueOf(monitor.getDbSource());
+
+        List<Map<String, Object>> result;
+        if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
+            String sql = monitor.getSql();
+            String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
+            Long count = db.select(countSql).getAs(Long.class).toBlocking().single();
+
+            if(count > 1000L){
+                sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
+            }
+
+            //执行sql
+            result = db.select(sql)
+                    .get(new MapResultSet())
+                    .toList().toBlocking().single();
+        }else {
+            throw new RuntimeException("暂不支持mongodb");
+        }
+
+        //处理返回值
+        execLogService.saveLogAndDecideNotity(monitor,result);
     }
 
     @Override

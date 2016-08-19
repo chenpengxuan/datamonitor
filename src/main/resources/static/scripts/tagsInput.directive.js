@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  angular.module('BlurAdmin.pages.appMenu')
+  angular.module('BlurAdmin.pages.monitor')
       .directive('tagInput', tagInput);
 
   /** @ngInject */

@@ -1,0 +1,78 @@
+<!--
+  ~ /*
+  ~  (C) Copyright 2016 Ymatou (http://www.ymatou.com/).
+  ~  All rights reserved.
+  ~  */
+  -->
+
+<div class="widgets">
+
+  <div class="row">
+    <div class="col-md-12">
+      <div ba-panel ba-panel-title="监控列表" ba-panel-class="with-scroll">
+        <div style="padding-bottom:20px;">
+          <form novalidate>
+              <pre style="padding-top: 10px;white-space: nowrap">
+                  功能名称<input name="name" type="text" ng-model="func.name">
+                  &nbsp;&nbsp;应用名称
+                <select ng-model="func.applicationId">
+                  <option value="">----请选择----</option>
+                  <option ng-repeat="s in applications" value="{{s.id}}">{{s.name}}</option>
+                </select>
+                  &nbsp;&nbsp;URL<input name="url" type="text" ng-model="func.url">
+                  &nbsp;&nbsp;创建人<input name="author" type="text" ng-model="func.author">
+                  <button class="btn btn-primary btn-large" ng-click="search()">查询</button>
+                  <button class="btn btn-info btn-large" ng-click="createFunc()">创建功能</button>
+              </pre>
+          </form>
+        </div>
+        <div class="horizontal-scroll">
+          <table class="table">
+            <thead>
+            <tr>
+              <th class="table-id" >#</th>
+              <th>功能名称</th>
+              <th>应用名称</th>
+              <th>描述</th>
+              <th>URL</th>
+              <th>提交方式</th>
+              <th>内容类型</th>
+              <th>创建人</th>
+              <th>创建时间</th>
+              <th>修改时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in funcList">
+              <td class="table-id">{{item.id}}</td>
+              <td>{{item.name}}</td>
+              <td>{{item.appName}}</td>
+              <td title="{{item.description}}">{{item.description | limit:50}}</td>
+              <td title="{{item.url}}">{{item.url | limit:50}}</td>
+              <td>{{item.httpMethod}}</td>
+              <td>{{item.contentType}}</td>
+              <td>{{item.author}}</td>
+              <td>{{item.createTime}}</td>
+              <td>{{item.updateTime}}</td>
+              <td>
+                <button class="btn btn-primary btn-xs" ui-sref="app.func-add({id:item.id})">Edit</button>
+                <button class="btn btn-danger btn-xs" ng-click="delete(item.id)">Delete</button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <paging
+                  page="page"
+                  page-size="pageSize"
+                  total="total"
+                  show-prev-next="true"
+                  show-first-last="true"
+                  scroll-top="true"
+                  paging-action="pagingAction(page, pageSize,total)"
+                  ></paging>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

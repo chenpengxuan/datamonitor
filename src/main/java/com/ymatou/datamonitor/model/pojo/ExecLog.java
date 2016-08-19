@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  * 
@@ -31,7 +32,7 @@ public class ExecLog extends Audit {
     protected String execUser;
 
     @Column(name = "exec_time")
-    protected String execTime;
+    protected Date execTime;
 
     @Column(name = "result_count")
     protected Long resultCount;
@@ -63,11 +64,11 @@ public class ExecLog extends Audit {
         this.execUser = execUser;
     }
 
-    public String getExecTime() {
+    public Date getExecTime() {
         return execTime;
     }
 
-    public void setExecTime(String execTime) {
+    public void setExecTime(Date execTime) {
         this.execTime = execTime;
     }
 

@@ -12,6 +12,25 @@ package com.ymatou.datamonitor.model;
  */
 public enum DataSourceEnum {
 
-    ymtRelease
+    ymtRelease(DbEnum.sqlserver)
+    ;
+    DbEnum dbEnum;
+
+    DataSourceEnum(DbEnum dbEnum) {
+        this.dbEnum = dbEnum;
+    }
+
+    public DbEnum getDbEnum() {
+        return dbEnum;
+    }
+
+    public static DataSourceEnum findByDbEnum(DbEnum dbEnum){
+        for (DataSourceEnum dataSourceEnum:DataSourceEnum.values()){
+            if(dataSourceEnum.getDbEnum() == dbEnum){
+                return dataSourceEnum;
+            }
+        }
+        return null;
+    }
 
 }
