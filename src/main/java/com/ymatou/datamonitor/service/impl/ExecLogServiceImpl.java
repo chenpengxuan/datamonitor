@@ -64,11 +64,11 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         repository.save(execLog);
 
         // TODO 处理邮件 或短信
-        if(resultCount > monitor.getEmailThreshold()){
+        if(null != monitor.getEmailThreshold() && resultCount > monitor.getEmailThreshold()){
             //TODO 处理邮件
         }
 
-        if(resultCount > monitor.getPhoneThreshold()){
+        if(null != monitor.getPhoneThreshold() && resultCount > monitor.getPhoneThreshold()){
             //TODO 处理短信
         }
 

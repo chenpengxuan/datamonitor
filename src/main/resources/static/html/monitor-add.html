@@ -1,0 +1,56 @@
+<!--
+  ~ /*
+  ~  (C) Copyright 2016 Ymatou (http://www.ymatou.com/).
+  ~  All rights reserved.
+  ~  */
+  -->
+
+<div class="widgets" ng-controller="funcAddCtrl">
+
+    <div id="form" ng-model="functionVo"  novalidate>
+        <div class="form-group">
+            <label for="applicationId">应用名称</label>
+            <select class="form-control selectpicker" ng-options="s.id as s.name for s in applications" ng-model="functionVo.applicationId" id="applicationId">
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="name">功能名称</label>
+            <input type="text" class="form-control" ng-model="functionVo.name" id="name" placeholder="功能名称">
+            <span style="color:red" ng-show="functionVo.$dirty && functionVo.$invalid">
+                <span ng-show="functionVo.name.$error.required">功能名称是必须的。</span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label for="url">URL</label>
+            <input type="text" class="form-control" ng-model="functionVo.url" id="url" placeholder="请求业务系统Url">
+        </div>
+        <div class="form-group">
+            <label for="httpMethod">提交方式</label>
+            <select class="form-control selectpicker" ng-model="functionVo.httpMethod" id="httpMethod" >
+                <option value="POST">POST</option>
+                <option value="GET">GET</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="contentType">内容类型</label>
+            <select class="form-control selectpicker" ng-model="functionVo.contentType" id="contentType" >
+                <option value="application/json">application/json</option>
+                <option value="application/x-www-form-urlencoded">application/x-www-form-urlencoded</option>
+            </select>
+        </div>
+
+        <div ba-panel ba-panel-title="功能参数设置" ba-panel-class="with-scroll">
+            <div include-with-scope="func-param.html"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">功能描述</label>
+            <textarea class="form-control" id="description" ng-model="functionVo.description"></textarea>
+        </div>
+
+        <div class="private-item" style="text-align:center">
+            <button type="button" ng-click="submit()" class="btn btn-primary">保存</button>
+            <input  type="button" ng-click="goBack()" value="返回" class="btn btn-warning"/>
+        </div>
+    </div>
+</div>
