@@ -137,7 +137,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
         Database db = DbUtil.getDb(monitor.getDbSource());
 
         //处理sql 等
-        DataSourceEnum dataSourceEnum = DataSourceEnum.findByDbEnum(DbEnum.valueOf(monitor.getDbSource()));
+        DataSourceEnum dataSourceEnum = DataSourceEnum.valueOf(monitor.getDbSource());
 
         List<Map<String, Object>> result;
         if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
@@ -146,7 +146,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
             Long count = db.select(countSql).getAs(Long.class).toBlocking().single();
 
             if(count > 1000L){
-                sql = PagerUtils.limit(sql,dataSourceEnum.name(),0,1000);
+                sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
             }
 
             //执行sql
