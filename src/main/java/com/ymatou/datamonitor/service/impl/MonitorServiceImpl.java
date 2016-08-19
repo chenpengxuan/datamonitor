@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
 import com.ymatou.datamonitor.dao.jpa.MonitorRepository;
+import com.ymatou.datamonitor.dao.mapper.MonitorMapper;
 import com.ymatou.datamonitor.model.RunStatusEnum;
 import com.ymatou.datamonitor.model.StatusEnum;
 import com.ymatou.datamonitor.model.pojo.Monitor;
@@ -35,12 +36,15 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     
     private static final Logger logger = LoggerFactory.getLogger(MonitorServiceImpl.class);
     
-    @Autowired
     private MonitorRepository monitorRepository;
+    
+    @Autowired
+    private MonitorMapper monitorMapper;
     
     @Autowired
     private SchedulerService schedulerService;
     
+    @Autowired
     public MonitorServiceImpl(MonitorRepository monitorRepository) {
         super(monitorRepository);
         this.monitorRepository = monitorRepository;
@@ -49,15 +53,15 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     @Override
     @Transactional
     public void addMonitor(MonitorVo monitorVo) throws SchedulerException {
-        //保存信息
+        //save monitor info 
         Monitor monitor = new Monitor();
         BeanUtils.copyProperties(monitorVo, monitor);
         save(monitor);
         
-        //添加调度信息
+        //add quartz scheduler job
         schedulerService.addJob(ExecuteJob.class, getJobName(monitor), monitor.getCronExpression());
         
-        //保存下次执行时间
+        //update nextFireTime
         monitor.setNextFireTime(schedulerService.getNextFireTime(JOB_SPEC + monitor.getId()));
         save(monitor);
         
@@ -123,14 +127,8 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     }
 
     @Override
-    public Page<MonitorVo> listMonitor(Pageable pageable) {
-        Page<Monitor> monitors = monitorRepository.findAll(pageable);
-
-        Page<MonitorVo> monitorVos = monitors.map(monitor -> {
-            MonitorVo monitorVo = new MonitorVo();
-            BeanUtils.copyProperties(monitor, monitorVo);
-            return monitorVo;
-        });
+    public Page<MonitorVo> listMonitor(MonitorVo monitorVo, Pageable pageable) {
+        Page<MonitorVo> monitorVos = monitorMapper.findByMonitorVo(monitorVo, pageable);
 
         return monitorVos;
     }

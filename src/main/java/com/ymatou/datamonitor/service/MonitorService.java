@@ -67,7 +67,9 @@ public interface MonitorService extends BaseService<Monitor> {
     /**
      * 获取所有任务
      * 
+     * @param monitorVo
+     * @param pageable
      * @return
      */
-    public Page<MonitorVo> listMonitor(Pageable pageable);
+    public Page<MonitorVo> listMonitor(MonitorVo monitorVo, Pageable pageable);
 }

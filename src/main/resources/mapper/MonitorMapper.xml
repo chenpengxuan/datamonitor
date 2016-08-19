@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  (C) Copyright 2016 Ymatou (http://www.ymatou.com/).
+  ~  All rights reserved.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ymatou.datamonitor.dao.mapper.MonitorMapper">
+
+	<resultMap id="Result" type="com.ymatou.datamonitor.model.vo.MonitorVo">
+		<id property="id" column="user_id" />
+		<result property="name" column="name" />
+		<result property="dbSourceId" column="db_source_id" />
+		<result property="sql" column="sql" />
+		<result property="cronExpression" column="cron_expression" />
+		<result property="scriptType" column="script_type" />
+		<result property="scriptCode" column="script_code" />
+		<result property="emails" column="emails" />
+		<result property="phones" column="phones" />
+		<result property="emailThreshold" column="email_threshold" />
+		<result property="phoneThreshold" column="phone_threshold" />
+		<result property="remark" column="remark" />
+		<result property="runStatus" column="run_status" />
+		<result property="title" column="title" />
+		<result property="lastFireTime" column="last_fire_time" />
+		<result property="nextFireTime" column="next_fire_time" />
+		<result property="createUser" column="create_user" />
+		<result property="updateUser" column="update_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+	
+	<sql id="columns">
+		m.id id, m.name name, m.db_source_id dbSourceId, m.sql sql, m.cron_expression cronExpression,
+		m.script_type scriptType, m.script_code scriptCode, m.emails emails, m.phones phones,
+		m.email_threshold emailThreshold, m.phone_threshold phoneThreshold, m.remark remark,
+		m.run_status runStatus, m.title title, m.last_fire_time lastFireTime, m.next_fire_time nextFireTime,
+		m.create_user createUser, m.update_user updateUser, m.create_time createTime, m.update_time updateTime
+	</sql>
+	
+	<sql id="dynamicWhere">
+		<where>
+			<if test="monitor.id !=null "> AND id = #{monitor.id} </if>
+			<if test="monitor.name !=null "> AND name = #{monitor.name} </if>
+			<if test="monitor.createUser !=null "> AND create_user = #{monitor.createUser} </if>
+			<if test="monitor.updateUser !=null "> AND update_user = #{monitor.updateUser} </if>
+			<if test="monitor.createTime !=null "> AND create_time = #{monitor.createTime} </if>
+			<if test="monitor.updateTime !=null "> AND update_time = #{monitor.updateTime} </if>
+		</where>
+	</sql>
+
+
+    <select id="findByMonitorVo"  resultMap="Result">
+        SELECT <include refid="columns"/>
+        FROM monitor
+        <include refid="dynamicWhere"/>
+    </select>
+
+
+</mapper>
