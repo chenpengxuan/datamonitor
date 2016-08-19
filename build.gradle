@@ -52,6 +52,7 @@ ext {
     rxJavaJdbcVersion = "0.7.2"
     junitVersion = "4.11"
     quartzVersion = "2.2.3"
+    javaxMailVersion = "1.4.7"
 }
 
 configurations {
@@ -103,9 +104,10 @@ dependencies {
 	compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 
     compile "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
-    compile("org.springframework:spring-context-support")
+    compile "org.springframework:spring-context-support"
     
     compile "org.quartz-scheduler:quartz:${quartzVersion}"
+    compile "javax.mail:mail:${javaxMailVersion}"
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile group: "junit", name: "junit", version: "${junitVersion}"

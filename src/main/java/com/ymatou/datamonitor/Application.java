@@ -7,7 +7,6 @@
 
 package com.ymatou.datamonitor;
 
-import com.github.davidmoten.rx.jdbc.Database;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.dao.PersistenceExceptionTranslationAutoConfiguration;

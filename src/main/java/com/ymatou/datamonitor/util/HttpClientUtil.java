@@ -146,6 +146,31 @@ public class HttpClientUtil {
         return result;
     }
     
+    /**
+     * 发送post请求， 获取应答码
+     * 
+     * @param url
+     * @return
+     * @throws Exception
+     */
+    public static int sendPost(String url) throws Exception {
+        int statusCode = -1;
+        HttpPost httpPost = new HttpPost(url);
+        try {
+            logger.info("executing request" + httpPost.getRequestLine());
+            logger.info("request header: " + Arrays.toString(httpPost.getAllHeaders()));
+
+            HttpResponse response = httpClient.execute(httpPost);
+
+            statusCode = response.getStatusLine().getStatusCode();
+            logger.info("response status code:" + statusCode);
+        } finally {
+            httpPost.releaseConnection();
+        }
+
+        return statusCode;
+    }
+    
     private static List<NameValuePair> initParams(Map<String, Object> paramsMap) {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         if (paramsMap == null)
@@ -159,5 +184,4 @@ public class HttpClientUtil {
         
         return params;
     }
-
 }

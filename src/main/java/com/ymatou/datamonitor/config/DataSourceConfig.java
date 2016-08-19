@@ -19,7 +19,6 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +45,7 @@ import com.ymatou.common.mybatis.interceptor.PaginationInterceptor;
 @EnableJpaRepositories(basePackages = "com.ymatou.datamonitor.dao.jpa")
 @EnableJpaAuditing
 @EnableTransactionManagement(proxyTargetClass = true)
-@EnableConfigurationProperties({ConnectionConfig.class,BizConfig.class})
+@EnableConfigurationProperties({ConnectionConfig.class,BizConfig.class, MailConfig.class})
 public class DataSourceConfig
         implements TransactionManagementConfigurer {
     @Autowired

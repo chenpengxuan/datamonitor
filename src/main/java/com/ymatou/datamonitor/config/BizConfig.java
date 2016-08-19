@@ -13,7 +13,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class BizConfig {
 
     private String ldapUrl;
-
+    
+    private String smsUrl;
+    
+    private String domain;
 
     public String getLdapUrl() {
         return ldapUrl;
@@ -21,5 +24,21 @@ public class BizConfig {
 
     public void setLdapUrl(String ldapUrl) {
         this.ldapUrl = ldapUrl;
+    }
+
+    public String getSmsUrl() {
+        return smsUrl;
+    }
+
+    public void setSmsUrl(String smsUrl) {
+        this.smsUrl = smsUrl;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 }
