@@ -61,8 +61,8 @@ public class Monitor extends Audit{
     @Column(name = "run_status")
     protected String runStatus;
     
-    @Column(name = "title")
-    protected String title;
+    @Column(name = "notify_title")
+    protected String notifyTitle;
     
     @Column(name = "last_fire_time")
     private Date lastFireTime;
@@ -174,12 +174,12 @@ public class Monitor extends Audit{
         this.runStatus = runStatus;
     }
 
-    public String getTitle() {
-        return title;
+    public String getNotifyTitle() {
+        return notifyTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setNotifyTitle(String notifyTitle) {
+        this.notifyTitle = notifyTitle;
     }
 
     public Date getLastFireTime() {

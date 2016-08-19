@@ -24,5 +24,13 @@ public enum DataSourceEnum {
         return dbEnum;
     }
 
+    public static DataSourceEnum findByDbEnum(DbEnum dbEnum){
+        for (DataSourceEnum dataSourceEnum:DataSourceEnum.values()){
+            if(dataSourceEnum.getDbEnum() == dbEnum){
+                return dataSourceEnum;
+            }
+        }
+        return null;
+    }
 
 }

@@ -137,7 +137,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
         Database db = DbUtil.getDb(monitor.getDbSource());
 
         //处理sql 等
-        DataSourceEnum dataSourceEnum = DataSourceEnum.valueOf(monitor.getDbSource());
+        DataSourceEnum dataSourceEnum = DataSourceEnum.findByDbEnum(DbEnum.valueOf(monitor.getDbSource()));
 
         List<Map<String, Object>> result;
         if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
