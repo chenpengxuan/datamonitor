@@ -3,7 +3,12 @@
  */
 package com.ymatou.datamonitor.dao.mapper;
 
+import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.ymatou.common.mybatis.annotation.MyBatisDao;
+import com.ymatou.datamonitor.model.vo.MonitorVo;
 
 /**
  * 
@@ -12,5 +17,7 @@ import com.ymatou.common.mybatis.annotation.MyBatisDao;
  */
 @MyBatisDao
 public interface MonitorMapper {
+    
+    Page<MonitorVo> findByMonitorVo(@Param("function") MonitorVo monitor, @Param("pageable") Pageable pageable);
 
 }
