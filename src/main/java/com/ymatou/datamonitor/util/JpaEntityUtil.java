@@ -6,8 +6,6 @@
 
 package com.ymatou.datamonitor.util;
 
-import java.util.function.Function;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
@@ -19,6 +17,8 @@ import org.springframework.orm.jpa.EntityManagerHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import rx.functions.FuncN;
+
 /**
  * @author luoshiqian 2016/8/18 18:42
  */
@@ -29,9 +29,9 @@ public class JpaEntityUtil {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    public Object supportJpaEntity(Function function) {
+    public Object supportJpaEntity(FuncN funcN,Object ...o) {
         openEntity();
-        Object result = function.apply("");
+        Object result = funcN.call(o);
         closeEntity();
         return result;
     }
