@@ -27,8 +27,7 @@ public class ExecLogController {
     @Autowired
     private ExecLogService execLogService;
     
-    @RequestMapping(path = "/list", method = RequestMethod.POST,
-            consumes="application/json",produces="application/json")
+    @RequestMapping(path = "/list")
     public Object list(ExecLogVo execLogVo, Pageable pageable){
         
         execLogVo.setStatus(StatusEnum.ENABLE.name());

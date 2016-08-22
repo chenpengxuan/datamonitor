@@ -21,7 +21,7 @@
         $stateProvider
             .state('logger', {
                 url: '/logger',
-                title: '操作日志',
+                title: '执行日志',
                 templateUrl: 'logger-list.html',
                 controller: 'loggerListCtrl',
                 sidebarMeta: {

@@ -9,24 +9,13 @@
 
   <div class="row">
     <div class="col-md-12">
-      <div ba-panel ba-panel-title="操作日志列表" ba-panel-class="with-scroll">
+      <div ba-panel ba-panel-title="执行日志列表" ba-panel-class="with-scroll">
         <div style="padding-bottom:20px;">
           <form novalidate>
               <pre style="padding-top: 10px;white-space: nowrap">
-                  功能名称<input name="name" type="text" ng-model="logger.functionName">
-                  &nbsp;&nbsp;应用名称
-                <select ng-model="logger.applicationId">
-                  <option value="">----请选择----</option>
-                  <option ng-repeat="s in applications" value="{{s.id}}">{{s.name}}</option>
-                </select>
-                  &nbsp;&nbsp;操作员<input name="userName" type="text" ng-model="logger.userName">
-                  &nbsp;&nbsp;起始时间<input class="laydate-icon" id="startTime" name="startTime" ng-model="logger.startTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
-                  &nbsp;&nbsp;结束时间<input class="laydate-icon" id="endTime" name="endTime" ng-model="logger.endTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
-                 <!-- 角色名称
-                  <select name="roleId" ng-model="user.roleId">
-                    <option value="">&#45;&#45;请选择&#45;&#45;</option>
-                    <option ng-repeat="r in roles" value="{{r.id}}">{{r.roleName}}</option>
-                  </select>-->
+                                 监控名称<input name="name" type="text" ng-model="logger.monitorName">
+                  &nbsp;&nbsp;执行人<input name="execUser" type="text" ng-model="logger.execUser">
+                  &nbsp;&nbsp;执行时间<input class="laydate-icon" id="execTime" name="execTime" ng-model="logger.execTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
                   <button class="btn btn-primary btn-large" ng-click="search()">查询</button>
               </pre>
           </form>
@@ -36,21 +25,19 @@
             <thead>
             <tr>
               <th class="table-id" >#</th>
-              <th>操作员</th>
-              <th>功能名称</th>
-              <th>应用名称</th>
-              <th>操作时间</th>
-              <th>请求报文</th>
-              <th>应答报文</th>
+              <th>监控名称</th>
+              <th>执行人</th>
+              <th>执行时间</th>
+              <th>结果集Count</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="item in loggerList">
               <td class="table-id">{{item.id}}</td>
-              <td>{{item.userName}}</td>
-              <td>{{item.functionName}}</td>
-              <td>{{item.appName}}</td>
-              <td>{{item.operateTime}}</td>
+              <td>{{item.monitorName}}</td>
+              <td>{{item.execUser}}</td>
+              <td>{{item.execTime}}</td>
+              <td>{{item.resultTime}}</td>
               <td title="{{item.request}}">{{item.request |limit:100}}</td>
               <td title="{{item.response}}">{{item.response |limit:100}}</td>
             </tr>

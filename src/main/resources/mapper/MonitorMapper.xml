@@ -23,7 +23,7 @@
 		<result property="phoneThreshold" column="phone_threshold" />
 		<result property="remark" column="remark" />
 		<result property="runStatus" column="run_status" />
-		<result property="title" column="title" />
+		<result property="notifyTitle" column="notify_title" />
 		<result property="lastFireTime" column="last_fire_time" />
 		<result property="nextFireTime" column="next_fire_time" />
 		<result property="createUser" column="create_user" />
@@ -36,7 +36,7 @@
 		m.id id, m.name name, m.db_source dbSource, m.sql sql, m.cron_expression cronExpression,
 		m.script_type scriptType, m.script_code scriptCode, m.emails emails, m.phones phones,
 		m.email_threshold emailThreshold, m.phone_threshold phoneThreshold, m.remark remark,
-		m.run_status runStatus, m.title title, m.last_fire_time lastFireTime, m.next_fire_time nextFireTime,
+		m.run_status runStatus, m.notify_title notifyTitle, m.last_fire_time lastFireTime, m.next_fire_time nextFireTime,
 		m.create_user createUser, m.update_user updateUser, m.create_time createTime, m.update_time updateTime
 	</sql>
 	
