@@ -13,14 +13,18 @@
         <div style="padding-bottom:20px;">
           <form novalidate>
               <pre style="padding-top: 10px;white-space: nowrap">
-                  功能名称<input name="name" type="text" ng-model="func.name">
-                  &nbsp;&nbsp;应用名称1
-                <select ng-model="func.applicationId">
+                  监控名称<input name="name" type="text" ng-model="obj.name">
+                  &nbsp;&nbsp;数据源
+                <select ng-model="obj.dbSource">
                   <option value="">----请选择----</option>
-                  <option ng-repeat="s in applications" value="{{s.id}}">{{s.name}}</option>
+                  <option ng-repeat="s in dbSources" value="{{s}}">{{s}}</option>
                 </select>
-                  &nbsp;&nbsp;URL<input name="url" type="text" ng-model="func.url">
-                  &nbsp;&nbsp;创建人<input name="author" type="text" ng-model="func.author">
+                  &nbsp;&nbsp;运行状态
+                <select ng-model="obj.runStatus">
+                  <option value="">----请选择----</option>
+                  <option ng-repeat="s in runStatuss" value="{{s.value}}">{{s.text}}</option>
+                </select>
+                  &nbsp;&nbsp;创建人<input name="createUser" type="text" ng-model="obj.createUser">
                   <button class="btn btn-primary btn-large" ng-click="search()">查询</button>
                   <button class="btn btn-info btn-large" ng-click="create()">创建监控</button>
               </pre>
@@ -31,31 +35,34 @@
             <thead>
             <tr>
               <th class="table-id" >#</th>
-              <th>功能名称</th>
-              <th>应用名称</th>
-              <th>描述</th>
-              <th>URL</th>
-              <th>提交方式</th>
-              <th>内容类型</th>
+              <th>监控名称</th>
+              <th>数据源</th>
+              <th>SQL</th>
+              <th>Cron表达式</th>
+              <th>运行状态</th>
+              <th>上次执行时间</th>
+              <th>下次执行时间</th>
               <th>创建人</th>
-              <th>创建时间</th>
               <th>修改时间</th>
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="item in funcList">
+            <tr ng-repeat="item in list">
               <td class="table-id">{{item.id}}</td>
               <td>{{item.name}}</td>
-              <td>{{item.appName}}</td>
-              <td title="{{item.description}}">{{item.description | limit:50}}</td>
-              <td title="{{item.url}}">{{item.url | limit:50}}</td>
-              <td>{{item.httpMethod}}</td>
-              <td>{{item.contentType}}</td>
-              <td>{{item.author}}</td>
-              <td>{{item.createTime}}</td>
+              <td>{{item.dbSource}}</td>
+              <td><a info="true" value="{{item.sql}}" href="javascript:;" >{{item.sql | limit:80}}</a></td>
+              <td>{{item.cronExpression}}</a></td>
+              <td>{{showRunStatus(item.runStatus) }}</td>
+              <td>{{item.lastFireTime}}</td>
+              <td>{{item.nextFireTime}}</td>
+              <td>{{item.createUser}}</td>
               <td>{{item.updateTime}}</td>
               <td>
-                <button class="btn btn-primary btn-xs" ui-sref="app.func-add({id:item.id})">Edit</button>
+                <button class="btn btn-primary btn-xs" ui-sref="monitor.monitor-add({id:item.id})">Edit</button>
+                <button class="btn btn-primary btn-xs" ng-show="item.runStatus == 'RUNNING'" ng-click="pause(item.id)">暂停</button>
+                <button class="btn btn-primary btn-xs" ng-show="item.runStatus == 'STOPPED'" ng-click="resume(item.id)">启动</button>
+                <button class="btn btn-primary btn-xs" ng-click="runNow(item.id)">立即运行</button>
                 <button class="btn btn-danger btn-xs" ng-click="delete(item.id)">Delete</button>
               </td>
             </tr>

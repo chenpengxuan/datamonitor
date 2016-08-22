@@ -6,6 +6,8 @@ package com.ymatou.datamonitor.model.vo;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ymatou.datamonitor.model.pojo.Monitor;
+import com.ymatou.datamonitor.util.Converter;
 
 /**
  * 
@@ -208,4 +210,10 @@ public class MonitorVo {
         this.nextFireTime = nextFireTime;
     }
 
+    public static MonitorVo from(Monitor monitor){
+        return Converter.convert(monitor,MonitorVo.class);
+    }
+    public static Monitor to(MonitorVo MonitorVo){
+        return Converter.convert(MonitorVo,Monitor.class);
+    }
 }

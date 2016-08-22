@@ -37,6 +37,9 @@ public class IndexController {
     @ResponseBody
     public Object getCurrentUser(){
         User user = CurrentUserUtil.getCurrentUser();
+        if(user == null){
+            WapperUtil.error("未登录!");
+        }
         user.setPassword("");
         return WapperUtil.success(CurrentUserUtil.getCurrentUser());
     }
