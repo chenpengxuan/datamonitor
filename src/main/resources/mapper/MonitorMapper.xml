@@ -10,9 +10,9 @@
 <mapper namespace="com.ymatou.datamonitor.dao.mapper.MonitorMapper">
 
 	<resultMap id="Result" type="com.ymatou.datamonitor.model.vo.MonitorVo">
-		<id property="id" column="user_id" />
+		<id property="id" column="id" />
 		<result property="name" column="name" />
-		<result property="dbSourceId" column="db_source_id" />
+		<result property="dbSource" column="db_source" />
 		<result property="sql" column="sql" />
 		<result property="cronExpression" column="cron_expression" />
 		<result property="scriptType" column="script_type" />
@@ -33,7 +33,7 @@
 	</resultMap>
 	
 	<sql id="columns">
-		m.id id, m.name name, m.db_source_id dbSourceId, m.sql sql, m.cron_expression cronExpression,
+		m.id id, m.name name, m.db_source dbSource, m.sql sql, m.cron_expression cronExpression,
 		m.script_type scriptType, m.script_code scriptCode, m.emails emails, m.phones phones,
 		m.email_threshold emailThreshold, m.phone_threshold phoneThreshold, m.remark remark,
 		m.run_status runStatus, m.title title, m.last_fire_time lastFireTime, m.next_fire_time nextFireTime,
@@ -44,6 +44,7 @@
 		<where>
 			<if test="monitor.id !=null "> AND id = #{monitor.id} </if>
 			<if test="monitor.name !=null "> AND name = #{monitor.name} </if>
+			<if test="monitor.status !=null "> AND status = #{monitor.status} </if>
 			<if test="monitor.createUser !=null "> AND create_user = #{monitor.createUser} </if>
 			<if test="monitor.updateUser !=null "> AND update_user = #{monitor.updateUser} </if>
 			<if test="monitor.createTime !=null "> AND create_time = #{monitor.createTime} </if>

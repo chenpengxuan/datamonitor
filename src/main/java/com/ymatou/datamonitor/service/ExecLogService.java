@@ -7,10 +7,10 @@
 package com.ymatou.datamonitor.service;
 
 import com.ymatou.datamonitor.model.pojo.ExecLog;
-import com.ymatou.datamonitor.model.pojo.User;
+import com.ymatou.datamonitor.model.vo.ExecLogVo;
 import com.ymatou.datamonitor.model.vo.MonitorVo;
-import org.quartz.Job;
-import org.quartz.SchedulerException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
@@ -18,6 +18,20 @@ import java.util.Map;
 
 public interface ExecLogService extends BaseService<ExecLog>  {
 
+    /**
+     * 保存执行日志，异常通知
+     * 
+     * @param monitorVo
+     * @param result
+     */
     void saveLogAndDecideNotity(MonitorVo monitorVo, List<Map<String,Object>> result);
-
+    
+    /**
+     * 获取执行日志
+     * 
+     * @param execLogVo
+     * @param pageable
+     * @return
+     */
+    Page<ExecLogVo> listExecLogVo(ExecLogVo execLogVo, Pageable pageable);
 }

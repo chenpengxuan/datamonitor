@@ -8,16 +8,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.ymatou.common.mybatis.annotation.MyBatisDao;
-import com.ymatou.datamonitor.model.vo.MonitorVo;
+import com.ymatou.datamonitor.model.vo.ExecLogVo;
 
 /**
  * 
- * @author qianmin 2016年8月18日 下午2:54:29
+ * @author qianmin 2016年8月22日 下午3:48:12
  *
  */
 @MyBatisDao
-public interface MonitorMapper {
+public interface ExecLogMapper {
     
-    Page<MonitorVo> findByMonitorVo(@Param("monitor") MonitorVo monitor, @Param("pageable") Pageable pageable);
-
+    Page<ExecLogVo> findByExecLogVo(@Param("execLog") ExecLogVo ExecLog, @Param("pageable") Pageable pageable);
 }

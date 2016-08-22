@@ -53,6 +53,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     
     @Autowired
     private SchedulerService schedulerService;
+    
     @Autowired
     private ExecLogService execLogService;
 

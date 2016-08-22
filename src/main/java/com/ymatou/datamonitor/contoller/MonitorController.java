@@ -112,7 +112,8 @@ public class MonitorController {
         return WapperUtil.success();
     }
     
-    @RequestMapping(path = "/list")
+    @RequestMapping(path = "/list", method = RequestMethod.POST,
+            consumes="application/json",produces="application/json")
     public Object list(MonitorVo monitorVo, Pageable pageable){
 
         monitorVo.setStatus(StatusEnum.ENABLE.name());

@@ -12,8 +12,8 @@ import com.github.davidmoten.rx.jdbc.ResultSetMapper;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author luoshiqian 2016/8/18 10:12
@@ -21,7 +21,7 @@ import java.util.TreeMap;
 public class MapResultSet implements ResultSetMapper<Map<String,Object>> {
     @Override
     public Map<String,Object> call(ResultSet rs) throws SQLException {
-        Map map = new TreeMap<>();
+        Map<String, Object> map = new LinkedHashMap<String, Object>();
 
         ResultSetMetaData metaData = rs.getMetaData();
 

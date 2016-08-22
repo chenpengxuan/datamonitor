@@ -29,7 +29,7 @@ public class DbTest {
 
         Database db = Database.from(
                 "jdbc:mysql://localhost:3306/datamonitor?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useOldAliasMetadataBehavior=true",
-                "root", "");
+                "root", "123456");
         List<Map<String, Object>> objectList =
                 db.select("select * from user")
                         .get(new MapResultSet()).toList().toBlocking().single();

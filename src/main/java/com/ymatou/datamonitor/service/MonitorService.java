@@ -23,7 +23,7 @@ public interface MonitorService extends BaseService<Monitor> {
      * @param monitorVo
      * @throws SchedulerException
      */
-    public void addMonitor(MonitorVo monitorVo) throws SchedulerException;
+    void addMonitor(MonitorVo monitorVo) throws SchedulerException;
 
     /**
      * 修改任务
@@ -31,7 +31,7 @@ public interface MonitorService extends BaseService<Monitor> {
      * @param monitorVo
      * @throws SchedulerException
      */
-    public void modifyMonitor(MonitorVo monitorVo) throws SchedulerException;
+    void modifyMonitor(MonitorVo monitorVo) throws SchedulerException;
 
     /**
      * 删除任务
@@ -39,7 +39,7 @@ public interface MonitorService extends BaseService<Monitor> {
      * @param monitorVo
      * @throws SchedulerException
      */
-    public void removeMonitor(MonitorVo monitorVo) throws SchedulerException;
+    void removeMonitor(MonitorVo monitorVo) throws SchedulerException;
 
     /**
      * 暂停任务
@@ -47,7 +47,7 @@ public interface MonitorService extends BaseService<Monitor> {
      * @param monitorVo
      * @throws SchedulerException
      */
-    public void pauseMonitor(MonitorVo monitorVo) throws SchedulerException;
+    void pauseMonitor(MonitorVo monitorVo) throws SchedulerException;
 
     /**
      * 重启任务
@@ -55,14 +55,14 @@ public interface MonitorService extends BaseService<Monitor> {
      * @param monitorVo
      * @throws SchedulerException
      */
-    public void resumeMonitor(MonitorVo monitorVo) throws SchedulerException;
+    void resumeMonitor(MonitorVo monitorVo) throws SchedulerException;
 
     /**
      * 立即执行任务
      * 
      * @param monitorVo
      */
-    public void runNow(MonitorVo monitorVo);
+    void runNow(MonitorVo monitorVo);
 
     /**
      * 获取所有任务
@@ -71,5 +71,5 @@ public interface MonitorService extends BaseService<Monitor> {
      * @param pageable
      * @return
      */
-    public Page<MonitorVo> listMonitor(MonitorVo monitorVo, Pageable pageable);
+    Page<MonitorVo> listMonitor(MonitorVo monitorVo, Pageable pageable);
 }

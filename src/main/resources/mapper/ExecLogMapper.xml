@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ /*
+  ~  (C) Copyright 2016 Ymatou (http://www.ymatou.com/).
+  ~  All rights reserved.
+  ~  */
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ymatou.datamonitor.dao.mapper.ExecLogMapper">
+
+	<resultMap id="Result" type="com.ymatou.datamonitor.model.vo.ExecLogVo">
+		<id property="id" column="id" />
+		<result property="monitorId" column="minitor_id"/>
+		<result property="execUser" column="exec_user"/>
+		<result property="execTime" column="exec_time"/>
+		<result property="resultCount" column="result_count"/>
+		<result property="result" column="result"/>
+		<result property="createUser" column="create_user" />
+		<result property="updateUser" column="update_user" />
+		<result property="createTime" column="create_time" />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+	
+	<sql id="columns">
+		e.id id, e.monitor_id monitorId, e.exec_user execUser, e.execTime, 
+		e.result_count resultCount, e.result result,
+		e.create_user createUser, e.update_user updateUser, e.create_time createTime, e.update_time updateTime
+	</sql>
+
+	<sql id="dynamicWhere">
+		<where>
+			<if test="execLog.id !=null "> AND id = #{exceLog.id} </if>
+			<if test="exceLog.monitorId !=null "> AND monitorId = #{exceLog.monitorId} </if>
+			<if test="exceLog.status !=null "> AND status = #{exceLog.status} </if>
+			<if test="execLog.execUser !=null "> AND exec_user = #{execLog.execUser} </if>
+			<if test="execLog.execTime !=null "> AND update_user = #{execLog.execTime} </if>
+			<if test="execLog.createUser !=null "> AND create_user = #{execLog.createUser} </if>
+			<if test="execLog.updateUser !=null "> AND update_user = #{execLog.updateUser} </if>
+			<if test="execLog.createTime !=null "> AND create_time = #{execLog.createTime} </if>
+			<if test="execLog.updateTime !=null "> AND update_time = #{execLog.updateTime} </if>
+		</where>
+	</sql>
+	
+	 <select id="findByExecLogVo"  resultMap="Result">
+        SELECT <include refid="columns"/>
+        FROM exec_log
+        <include refid="dynamicWhere"/>
+    </select>
+</mapper>
