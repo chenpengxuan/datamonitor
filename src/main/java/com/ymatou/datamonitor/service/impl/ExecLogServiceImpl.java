@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.ymatou.datamonitor.dao.jpa.ExecLogRepository;
+import com.ymatou.datamonitor.dao.mapper.ExecLogMapper;
 import com.ymatou.datamonitor.model.pojo.ExecLog;
 import com.ymatou.datamonitor.model.vo.ExecLogVo;
 import com.ymatou.datamonitor.model.vo.MonitorVo;
@@ -35,6 +36,9 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
 
 
     private ExecLogRepository repository;
+    
+    @Autowired
+    private ExecLogMapper execLogMapper;
     
     @Autowired
     private IntegrationService integrationService;
@@ -117,7 +121,10 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
     }
 
     @Override
-    public Page<ExecLogVo> listExecLogVo(ExecLogVo monitorVo, Pageable pageable) {
-        return null;
+    public Page<ExecLogVo> listExecLogVo(ExecLogVo execLogVo, Pageable pageable) {
+        
+        Page<ExecLogVo> execLogs = execLogMapper.findByExecLogVo(execLogVo, pageable);
+        
+        return execLogs;
     }
 }

@@ -5,6 +5,8 @@ package com.ymatou.datamonitor.model.vo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 /**
@@ -16,7 +18,9 @@ public class ExecLogVo {
     
     private Long id;
     private Long monitorId;
+    private String monitorName;
     private String execUser;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date execTime;
     private Long resultCount;
     private String result;
@@ -27,6 +31,10 @@ public class ExecLogVo {
     private String createUser;
     private String updateUser;
     private String status;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date endTime;
 
     public Long getId() {
         return id;
@@ -35,13 +43,21 @@ public class ExecLogVo {
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public Long getMonitorId() {
         return monitorId;
     }
 
     public void setMonitorId(Long monitorId) {
         this.monitorId = monitorId;
+    }
+    
+    public String getMonitorName() {
+        return monitorName;
+    }
+
+    public void setMonitorName(String monitorName) {
+        this.monitorName = monitorName;
     }
 
     public String getExecUser() {
@@ -114,5 +130,21 @@ public class ExecLogVo {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
     }
 }

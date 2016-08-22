@@ -3,7 +3,7 @@
 
     <contextName>dev</contextName>
 
-    <property name="LOG_HOME" value="/usr/local/log/restkeeper.ymatou.cn" />
+    <property name="LOG_HOME" value="/usr/local/log/datamonitor.ymatou.cn" />
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -25,13 +25,13 @@
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
 
-    <logger name="com.ymatou" level="INFO"/>
-    <logger name="org.springframework" level="INFO"/>
+    <logger name="com.ymatou" level="DEBUG"/>
+    <logger name="org.springframework" level="DEBUG"/>
 
 
 </configuration>

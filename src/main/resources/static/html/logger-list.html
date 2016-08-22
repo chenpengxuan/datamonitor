@@ -15,7 +15,8 @@
               <pre style="padding-top: 10px;white-space: nowrap">
                                  监控名称<input name="name" type="text" ng-model="logger.monitorName">
                   &nbsp;&nbsp;执行人<input name="execUser" type="text" ng-model="logger.execUser">
-                  &nbsp;&nbsp;执行时间<input class="laydate-icon" id="execTime" name="execTime" ng-model="logger.execTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                   &nbsp;&nbsp;执行起始时间<input class="laydate-icon" id="startTime" name="startTime" ng-model="logger.startTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+                   &nbsp;&nbsp;执行结束时间<input class="laydate-icon" id="endTime" name="endTime" ng-model="logger.endTime" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
                   <button class="btn btn-primary btn-large" ng-click="search()">查询</button>
               </pre>
           </form>
@@ -37,7 +38,7 @@
               <td>{{item.monitorName}}</td>
               <td>{{item.execUser}}</td>
               <td>{{item.execTime}}</td>
-              <td>{{item.resultTime}}</td>
+              <td>{{item.resultCount}}</td>
               <td title="{{item.request}}">{{item.request |limit:100}}</td>
               <td title="{{item.response}}">{{item.response |limit:100}}</td>
             </tr>

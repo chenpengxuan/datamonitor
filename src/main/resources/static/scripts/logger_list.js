@@ -30,10 +30,13 @@
 
       param.monitorName = $scope.logger.monitorName;
       param.execUser = $scope.logger.execUser;
-      if(typeof($("#execTime")[0]) != "undefined"){
-    	  param.startTime = $("#execTime")[0].value;
+      if(typeof($("#startTime")[0]) != "undefined"){
+    	  param.startTime = $("#startTime")[0].value;
       }
-      param.sort = "o.exec_time,desc";
+      if(typeof($("#endTime")[0]) != "undefined"){
+    	  param.endTime = $("#endTime")[0].value;
+      }
+      param.sort = "e.exec_time,desc";
 
       doPaging($http,"/execLog/list",param,function (data) {
           $scope.total = data.content.totalElements;
