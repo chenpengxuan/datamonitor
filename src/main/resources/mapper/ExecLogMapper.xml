@@ -31,21 +31,18 @@
 
 	<sql id="dynamicWhere">
 		<where>
-			<if test="execLog.id !=null "> AND e.id = #{execLog.id} </if>
-			<if test="execLog.createUser !=null "> AND e.create_user = #{execLog.createUser} </if>
-			<if test="execLog.updateUser !=null "> AND e.update_user = #{execLog.updateUser} </if>
-			<if test="execLog.createTime !=null "> AND e.create_time = #{execLog.createTime} </if>
-			<if test="execLog.updateTime !=null "> AND e.update_time = #{execLog.updateTime} </if>
-			
+			<!-- 
+				<if test="execLog.id !=null "> AND e.id = #{execLog.id} </if>
+				<if test="execLog.createUser !=null "> AND e.create_user = #{execLog.createUser} </if>
+				<if test="execLog.updateUser !=null "> AND e.update_user = #{execLog.updateUser} </if>
+				<if test="execLog.createTime !=null "> AND e.create_time = #{execLog.createTime} </if>
+				<if test="execLog.updateTime !=null "> AND e.update_time = #{execLog.updateTime} </if>
+			 -->
 			<if test="execLog.status !=null "> AND e.status = #{execLog.status} </if>
 			<if test="execLog.monitorName !=null "> AND m.name like CONCAT('%',#{execLog.monitorName},'%' )</if>
 			<if test="execLog.execUser !=null "> AND e.exec_user like CONCAT('%',#{execLog.execUser},'%' )</if>
-			<if test="execLog.startTime != null">
-				<![CDATA[ AND e.exec_time > #{execLog.startTime} ]]> 
-			</if>
-			<if test="execLog.endTime != null">  
-				<![CDATA[ AND e.exec_time < #{execLog.endTime} ]]> 
-			</if>
+			<if test="execLog.startTime != null"><![CDATA[ AND e.exec_time > #{execLog.startTime} ]]></if>
+			<if test="execLog.endTime != null"><![CDATA[ AND e.exec_time < #{execLog.endTime} ]]></if>
 		</where>
 	</sql>
 	
