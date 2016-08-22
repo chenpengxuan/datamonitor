@@ -75,7 +75,7 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         //处理邮件 或短信
         if(null != monitor.getEmailThreshold() && resultCount > monitor.getEmailThreshold()){
             String html = generateHtml(monitor, result);
-            integrationService.sendHtmlEmail(monitor.getEmails(), monitor.getTitle(), html);
+            integrationService.sendHtmlEmail(monitor.getEmails(), monitor.getNotifyTitle(), html);
         }
 
         if(null != monitor.getPhoneThreshold() && resultCount > monitor.getPhoneThreshold()){
