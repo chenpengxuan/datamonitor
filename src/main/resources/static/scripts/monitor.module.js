@@ -20,22 +20,36 @@
     function routeConfig($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('monitor', {
-                url: '/monitor-list',
+                url: '/monitor',
+                template : '<ui-view></ui-view>',
+                abstract: true,
                 title: '监控管理',
+                sidebarMeta: {
+                    icon: 'ion-grid',
+                    order: 300,
+                },
+            })
+            .state('monitor.monitor-list', {
+                url: '/monitor-list',
+                title: '监控列表',
                 templateUrl: 'monitor-list.html',
                 controller: 'listCtrl',
                 sidebarMeta: {
                     icon: 'ion-grid',
                     order: 300,
                 }
-            }).state('monitor.monitor-add', {
-            url: '/monitor-add/:id',
-            templateUrl: 'monitor-add.html',
-            controller: 'monitorAddCtrl',
-            title: '创建/修改监控',
-            hide: true
-        });
-        // $urlRouterProvider.when('/app', '/app/func-list');
+            })
+            .state('monitor.monitor-add',
+                {
+                url: '/monitor-add/:id',
+                templateUrl: 'monitor-add.html',
+                controller:'monitorAddCtrl',
+                title: '创建/修改监控'
+                // hide: true
+            })
+        ;
+
+        $urlRouterProvider.when('/monitor','/monitor/monitor-list');
     }
 
 })();

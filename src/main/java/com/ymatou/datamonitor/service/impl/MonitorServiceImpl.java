@@ -69,6 +69,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
         //save monitor info 
         Monitor monitor = new Monitor();
         BeanUtils.copyProperties(monitorVo, monitor);
+        monitor.setRunStatus(RunStatusEnum.RUNNING.name());
         save(monitor);
         
         //add quartz scheduler job
@@ -84,11 +85,23 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     @Override
     @Transactional
     public void modifyMonitor(MonitorVo monitorVo) throws SchedulerException {
-        schedulerService.modifyScheduler(getJobName(monitorVo), monitorVo.getCronExpression());
-    
+
         Monitor monitor = monitorRepository.findOne(monitorVo.getId());
-        monitor.setCronExpression(monitorVo.getCronExpression());
-        monitor.setNextFireTime(schedulerService.getNextFireTime(JOB_SPEC + monitor.getId()));
+        if(!monitorVo.getCronExpression().equals(monitor.getCronExpression())) {
+            schedulerService.modifyScheduler(getJobName(monitorVo), monitorVo.getCronExpression());
+            monitor.setCronExpression(monitorVo.getCronExpression());
+            monitor.setNextFireTime(schedulerService.getNextFireTime(JOB_SPEC + monitor.getId()));
+        }
+        monitor.setName(monitorVo.getName());
+        monitor.setDbSource(monitorVo.getDbSource());
+        monitor.setSql(monitorVo.getSql());
+        monitor.setEmails(monitorVo.getEmails());
+        monitor.setPhones(monitorVo.getPhones());
+        monitor.setEmailThreshold(monitorVo.getEmailThreshold());
+        monitor.setPhoneThreshold(monitorVo.getPhoneThreshold());
+        monitor.setNotifyTitle(monitorVo.getNotifyTitle());
+        monitor.setRemark(monitorVo.getRemark());
+
         monitorRepository.save(monitor);
         
         logger.info("Monitor modified. {}", JSON.toJSONString(monitor));

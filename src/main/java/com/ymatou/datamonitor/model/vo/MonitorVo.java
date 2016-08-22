@@ -27,7 +27,7 @@ public class MonitorVo {
     private Long phoneThreshold;
     private String remark;
     private String runStatus;
-    private String title;
+    private String notifyTitle;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -144,12 +144,12 @@ public class MonitorVo {
         this.runStatus = runStatus;
     }
 
-    public String getTitle() {
-        return title;
+    public String getNotifyTitle() {
+        return notifyTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setNotifyTitle(String notifyTitle) {
+        this.notifyTitle = notifyTitle;
     }
 
     public Date getCreateTime() {

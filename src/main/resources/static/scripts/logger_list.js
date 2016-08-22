@@ -57,8 +57,9 @@
     $scope.pagingAction($scope.page,$scope.pageSize,$scope.total);
 
     $scope.search = function(){
-      $scope.page = 1;
-      $scope.pagingAction($scope.page,$scope.pageSize);
+      $state.go("logger.test");
+      // $scope.page = 1;
+      // $scope.pagingAction($scope.page,$scope.pageSize);
     };
 
   }

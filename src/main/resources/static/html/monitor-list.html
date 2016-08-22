@@ -14,7 +14,7 @@
           <form novalidate>
               <pre style="padding-top: 10px;white-space: nowrap">
                   功能名称<input name="name" type="text" ng-model="func.name">
-                  &nbsp;&nbsp;应用名称
+                  &nbsp;&nbsp;应用名称1
                 <select ng-model="func.applicationId">
                   <option value="">----请选择----</option>
                   <option ng-repeat="s in applications" value="{{s.id}}">{{s.name}}</option>
@@ -22,7 +22,7 @@
                   &nbsp;&nbsp;URL<input name="url" type="text" ng-model="func.url">
                   &nbsp;&nbsp;创建人<input name="author" type="text" ng-model="func.author">
                   <button class="btn btn-primary btn-large" ng-click="search()">查询</button>
-                  <button class="btn btn-info btn-large" ng-click="createFunc()">创建功能</button>
+                  <button class="btn btn-info btn-large" ng-click="create()">创建监控</button>
               </pre>
           </form>
         </div>

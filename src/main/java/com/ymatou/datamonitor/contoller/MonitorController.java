@@ -3,6 +3,8 @@
  */
 package com.ymatou.datamonitor.contoller;
 
+import com.ymatou.datamonitor.model.pojo.Monitor;
+import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,8 @@ import com.ymatou.datamonitor.model.StatusEnum;
 import com.ymatou.datamonitor.model.vo.MonitorVo;
 import com.ymatou.datamonitor.service.MonitorService;
 import com.ymatou.datamonitor.util.WapperUtil;
+
+import java.text.ParseException;
 
 /**
  * 
@@ -36,12 +40,18 @@ public class MonitorController {
     @RequestMapping(path = "/add", method = RequestMethod.POST,
             consumes="application/json",produces="application/json")
     public Object addMonitor(@RequestBody MonitorVo monitorVo){
-        
+
+        try{
+            new CronExpression(monitorVo.getCronExpression());
+        }catch (ParseException e){
+            return WapperUtil.error("cron表达式格式不正确!");
+        }
+
         try {
             monitorService.addMonitor(monitorVo);
         } catch (SchedulerException e) {
             logger.warn("Add Monitor Failed.", e);
-            WapperUtil.error("Add Monitor Failed.");
+            return WapperUtil.error("SchedulerException!");
         }
         
         return WapperUtil.success();
@@ -50,7 +60,13 @@ public class MonitorController {
     @RequestMapping(path = "/modify", method = RequestMethod.POST,
             consumes="application/json",produces="application/json")
     public Object modifyMonitor(@RequestBody MonitorVo monitorVo){
-        
+
+        try{
+            new CronExpression(monitorVo.getCronExpression());
+        }catch (ParseException e){
+            return WapperUtil.error("cron表达式格式不正确!");
+        }
+
         try {
             monitorService.modifyMonitor(monitorVo);
         } catch (SchedulerException e) {
@@ -120,5 +136,12 @@ public class MonitorController {
         Page<MonitorVo> monitorPage = monitorService.listMonitor(monitorVo,pageable);
 
         return WapperUtil.success(monitorPage);
+    }
+    
+    @RequestMapping(path = "/get")
+    public Object get(Long id){
+
+        Monitor monitor = monitorService.findById(id);
+        return WapperUtil.success(monitor);
     }
 }
