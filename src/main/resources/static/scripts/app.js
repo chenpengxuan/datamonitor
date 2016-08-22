@@ -113,7 +113,11 @@ $.ajax({
   async:false,
   url: "/getCurrentUser",
   success: function(data){
-    cookie.addCookie(COOKIE_UserVo,JSON.stringify(data.content));
+    if(data.success){
+      cookie.addCookie(COOKIE_UserVo,JSON.stringify(data.content));
+    }else{
+      location.href = "login.html";
+    }
   }
 });
 
@@ -145,3 +149,15 @@ function addInterceptor(app) {
     $httpProvider.interceptors.push(HttpInterceptor);
   }]);
 }
+
+
+$(document).on('click',"[info='true']",function () {
+  var that = this;
+  var str = $(this).attr('value');
+
+  layer.tips(str, that,{
+    tips: [2, '#3595CC'],
+    time: 3000,
+    maxWidth: 600,
+  });
+});

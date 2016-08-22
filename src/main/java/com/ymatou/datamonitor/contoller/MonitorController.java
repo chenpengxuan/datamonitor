@@ -4,6 +4,7 @@
 package com.ymatou.datamonitor.contoller;
 
 import com.ymatou.datamonitor.model.pojo.Monitor;
+import com.ymatou.datamonitor.util.Converter;
 import org.quartz.CronExpression;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
@@ -77,9 +78,8 @@ public class MonitorController {
         return WapperUtil.success();
     }
     
-    @RequestMapping(path = "/remove", method = RequestMethod.POST,
-            consumes="application/json",produces="application/json")
-    public Object removeMonitor(@RequestBody MonitorVo monitorVo){
+    @RequestMapping(path = "/remove")
+    public Object removeMonitor(MonitorVo monitorVo){
         
         try {
             monitorService.removeMonitor(monitorVo);
@@ -91,9 +91,8 @@ public class MonitorController {
         return WapperUtil.success();
     }
     
-    @RequestMapping(path = "/pause", method = RequestMethod.POST,
-            consumes="application/json",produces="application/json")
-    public Object pauseMonitor(@RequestBody MonitorVo monitorVo){
+    @RequestMapping(path = "/pause")
+    public Object pauseMonitor(MonitorVo monitorVo){
         
         try {
             monitorService.pauseMonitor(monitorVo);
@@ -105,9 +104,8 @@ public class MonitorController {
         return WapperUtil.success();
     }
     
-    @RequestMapping(path = "/resume", method = RequestMethod.POST,
-            consumes="application/json",produces="application/json")
-    public Object resumeMonitor(@RequestBody MonitorVo monitorVo){
+    @RequestMapping(path = "/resume")
+    public Object resumeMonitor(MonitorVo monitorVo){
         
         try {
             monitorService.resumeMonitor(monitorVo);
@@ -119,11 +117,11 @@ public class MonitorController {
         return WapperUtil.success();
     }
     
-    @RequestMapping(path = "/runNow", method = RequestMethod.POST,
-            consumes="application/json",produces="application/json")
-    public Object runNow(@RequestBody MonitorVo monitorVo){
-        
-        monitorService.runNow(monitorVo);
+    @RequestMapping(path = "/runNow")
+    public Object runNow(MonitorVo monitorVo){
+        Monitor monitor = monitorService.findById(monitorVo.getId());
+
+        monitorService.runNow(MonitorVo.from(monitor));
         
         return WapperUtil.success();
     }
@@ -143,4 +141,5 @@ public class MonitorController {
         Monitor monitor = monitorService.findById(id);
         return WapperUtil.success(monitor);
     }
+
 }
