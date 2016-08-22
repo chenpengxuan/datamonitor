@@ -32,18 +32,17 @@ public class MySimpleMappingExceptionResolver extends SimpleMappingExceptionReso
 
         boolean isAjax = AJAX_HEADER.equals(request.getHeader(HEADER_STRING));
 
-        logger.error("exception:{}",ex.getCause());
-        ex.printStackTrace();
+        logger.error("exception :",ex);
 
         if (isAjax) {
 
-            if (ex instanceof BaseException) {
+//            if (ex instanceof BaseException) {
+//                responseString(response, JSON.toJSONString(WapperUtil.error(ResponseStatusEnum.ERROR, ex.getMessage())));
+//            } else if (ex instanceof BaseRunTimeException) {
+//                responseString(response, JSON.toJSONString(WapperUtil.error(ResponseStatusEnum.ERROR, ex.getMessage())));
+//            } else {
                 responseString(response, JSON.toJSONString(WapperUtil.error(ResponseStatusEnum.ERROR, ex.getMessage())));
-            } else if (ex instanceof BaseRunTimeException) {
-                responseString(response, JSON.toJSONString(WapperUtil.error(ResponseStatusEnum.ERROR, ex.getMessage())));
-            } else {
-                return super.doResolveException(request, response, handler, ex);
-            }
+//            }
 
             return new ModelAndView();
         }

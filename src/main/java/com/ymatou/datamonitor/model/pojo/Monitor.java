@@ -31,7 +31,7 @@ public class Monitor extends Audit{
     @Column(name = "db_source")
     protected String dbSource;
     
-    @Column(name = "sql")
+    @Column(name = "`sql`")
     protected String sql;
     
     @Column(name = "cron_expression")

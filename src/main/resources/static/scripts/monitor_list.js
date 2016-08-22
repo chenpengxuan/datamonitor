@@ -25,14 +25,14 @@
     $scope.func = {};
 
     //获取应用
-    $http({
-      url: "/application/getAll",
-      method: 'GET'
-    }).success(function (data) {
-      if (data.success) {
-        $scope.applications = data.content;
-      }
-    });
+    // $http({
+    //   url: "/application/getAll",
+    //   method: 'GET'
+    // }).success(function (data) {
+    //   if (data.success) {
+    //     $scope.applications = data.content;
+    //   }
+    // });
 
     $scope.pagingAction = function(page,pageSize) {
       var param = {};
@@ -46,10 +46,10 @@
       param.applicationId = $scope.func.applicationId;
       param.sort = "f.update_time,desc";
 
-      doPaging($http,"/function/list",param,function (data) {
-          $scope.total = data.content.totalElements;
-          $scope.funcList = data.content.content;
-      });
+      // doPaging($http,"/function/list",param,function (data) {
+      //     $scope.total = data.content.totalElements;
+      //     $scope.funcList = data.content.content;
+      // });
     };
     $scope.pagingAction($scope.page,$scope.pageSize,$scope.total);
 
@@ -58,8 +58,9 @@
       $scope.pagingAction($scope.page,$scope.pageSize);
     };
 
-    $scope.createFunc = function(){
-      $state.go("app.func-add");
+    $scope.create = function(){
+      console.log("fds");
+      $state.go("monitor.monitor-add");
     };
 
     $scope.delete = function(id){
