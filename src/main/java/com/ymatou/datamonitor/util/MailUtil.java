@@ -1,6 +1,9 @@
 package com.ymatou.datamonitor.util;
 
+import java.util.Properties;
+
 import javax.mail.MessagingException;
+import javax.mail.Session;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
