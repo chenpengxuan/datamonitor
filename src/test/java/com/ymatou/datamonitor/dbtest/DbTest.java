@@ -186,7 +186,7 @@ public class DbTest {
 
         System.out.println(System.currentTimeMillis());
         //执行sql
-        List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100000 * from ymt_orders order by sphone")
+        List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100 * from ymt_paymentinstruction where PayGetwayCallBack is not null")
                 .get(new MapResultSet())
                 .toList().toBlocking().single();
         System.out.println(System.currentTimeMillis());
