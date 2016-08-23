@@ -94,8 +94,9 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         sb.append("<!DOCTYPE html><html><head>")
           .append("<meta charset='utf-8'><meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>")
           .append("</head><body><h3>")
-          .append(String.format("Monitor[%s] Threshold[%s] CurrentCount[%s] ResultSet: ", 
-                  monitor.getName(), monitor.getEmailThreshold(), result.size()))
+          .append(String.format("Monitor[%s] ExecTime[%s] Threshold[%s] CurrentCount[%s] ResultSet: ", 
+                  monitor.getName(), new SimpleDateFormat("yyyyMMdd hh:mm:ss").format(new Date()), 
+                  monitor.getEmailThreshold(), result.size()))
           .append("</h3><table border='1'><tr>");
         for(Entry<String, Object> entry : result.get(0).entrySet()){
             sb.append("<td>").append(entry.getKey()).append("</td>");

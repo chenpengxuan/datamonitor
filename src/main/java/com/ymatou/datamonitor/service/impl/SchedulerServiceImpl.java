@@ -38,7 +38,8 @@ public class SchedulerServiceImpl implements SchedulerService{
                 .requestRecovery(true) //Scheduler非正常停止(进程停止或机器关闭等)时，Scheduler再次启动时，该Job会重新执行一次
                 .build();
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression)
+                        .withMisfireHandlingInstructionFireAndProceed())
                 .build();
         scheduler.scheduleJob(jobDetail, trigger);
     }

@@ -31,7 +31,12 @@ public class JpaEntityUtil {
 
     public Object supportJpaEntity(FuncN funcN,Object ...o) {
         openEntity();
-        Object result = funcN.call(o);
+        Object result = null;
+        try{
+            result = funcN.call(o);
+        }catch(Exception e){
+            logger.error("执行出错", e);
+        }
         closeEntity();
         return result;
     }
@@ -40,16 +45,20 @@ public class JpaEntityUtil {
     private void openEntity() {
         EntityManager em = entityManagerFactory.createEntityManager();
         EntityManagerHolder emHolder = new EntityManagerHolder(em);
-        TransactionSynchronizationManager.bindResource(entityManagerFactory, emHolder);
-
+        
+        if(!TransactionSynchronizationManager.hasResource(entityManagerFactory)){
+            TransactionSynchronizationManager.bindResource(entityManagerFactory, emHolder);
+        }
         logger.info("Open JPA EntityManager in OpenEntityManagerInViewInterceptor");
     }
 
     private void closeEntity() {
-        EntityManagerHolder emHolder =
-                (EntityManagerHolder) TransactionSynchronizationManager.unbindResource(entityManagerFactory);
-        logger.debug("Closing JPA EntityManager in OpenEntityManagerInViewInterceptor");
-        EntityManagerFactoryUtils.closeEntityManager(emHolder.getEntityManager());
+        if(TransactionSynchronizationManager.hasResource(entityManagerFactory)){
+            EntityManagerHolder emHolder =
+                    (EntityManagerHolder) TransactionSynchronizationManager.unbindResource(entityManagerFactory);
+            logger.debug("Closing JPA EntityManager in OpenEntityManagerInViewInterceptor");
+            EntityManagerFactoryUtils.closeEntityManager(emHolder.getEntityManager());
+        }
     }
 
 }

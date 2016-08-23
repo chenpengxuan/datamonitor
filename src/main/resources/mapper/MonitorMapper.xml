@@ -45,6 +45,7 @@
 			<if test="monitor.id !=null "> AND m.id = #{monitor.id} </if>
 			<if test="monitor.name !=null and monitor.name!=''"> AND m.name like CONCAT('%',#{monitor.name},'%' )</if>
 			<if test="monitor.dbSource !=null "> AND m.db_source = #{monitor.dbSource} </if>
+			<if test="monitor.status !=null "> AND m.status = #{monitor.status} </if>
 			<if test="monitor.runStatus !=null "> AND m.run_status = #{monitor.runStatus} </if>
 			<if test="monitor.createUser !=null and monitor.createUser!=''"> AND m.create_user like CONCAT('%',#{monitor.createUser},'%' )</if>
 			<if test="monitor.updateUser !=null and monitor.updateUser!=''"> AND m.update_user  like CONCAT('%',#{monitor.updateUser},'%' ) </if>

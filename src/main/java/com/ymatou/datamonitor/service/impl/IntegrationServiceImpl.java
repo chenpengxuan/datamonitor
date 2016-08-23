@@ -15,6 +15,9 @@ import com.ymatou.datamonitor.config.MailConfig;
 import com.ymatou.datamonitor.service.IntegrationService;
 
 import static com.ymatou.datamonitor.util.Constants.*;
+
+import java.net.URLEncoder;
+
 import com.ymatou.datamonitor.util.HttpClientUtil;
 import com.ymatou.datamonitor.util.MailUtil;
 
@@ -37,11 +40,12 @@ public class IntegrationServiceImpl implements IntegrationService{
     @Autowired
     private MailUtil mailUtil;
     
+    @SuppressWarnings("deprecation")
     @Override
     public boolean sendMessage(String phone, String content) {
         int statusCode = -1;
         try {
-            String url = String.format(bizConfig.getSmsUrl(), bizConfig.getDomain(), phone, content);
+            String url = String.format(bizConfig.getSmsUrl(), bizConfig.getDomain(), phone, URLEncoder.encode(content));
             statusCode = HttpClientUtil.sendPost(url);
             if (statusCode != HttpStatus.SC_OK && statusCode != HttpStatus.SC_NO_CONTENT) {
                 statusCode = HttpClientUtil.sendPost(url);
@@ -56,7 +60,7 @@ public class IntegrationServiceImpl implements IntegrationService{
     @Override
     public boolean sendHtmlEmail(String mailTo, String title, String content) {
         StringBuilder sb = new StringBuilder().append("send to: ").append(mailTo)
-                    .append("; title: ").append(title).append("; content: ").append(content);
+                    .append("; title: ").append(title);//.append("; content: ").append(content);
         logger.info(sb.toString());
 
         if (StringUtils.isBlank(mailTo) || StringUtils.isBlank(content) || StringUtils.isBlank(title)) {

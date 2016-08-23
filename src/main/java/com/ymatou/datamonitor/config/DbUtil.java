@@ -20,13 +20,19 @@ import com.ymatou.datamonitor.model.DataSourceEnum;
 public class DbUtil {
 
     public static Map<String, Database> databaseMap = Maps.newHashMap();
+    public static Map<String, DataSource> datasourceMap = Maps.newHashMap();
 
     public static void addDataBase(DataSourceEnum dataSourceEnum, DataSource dataSource) {
         Database database = Database.fromDataSource(dataSource);
         databaseMap.put(dataSourceEnum.name(), database);
+        datasourceMap.put(dataSourceEnum.name(), dataSource);
     }
 
     public static Database getDb(String name) {
         return databaseMap.get(name);
+    }
+    
+    public static DataSource getDs(String name){
+        return datasourceMap.get(name);
     }
 }

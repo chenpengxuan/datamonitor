@@ -62,8 +62,10 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     
     @Autowired
     private ExecLogService execLogService;
+    
     @Autowired
     private TransactionTemplate transactionTemplate;
+    
     @Autowired
     private DataSource dataSource;
 
@@ -160,7 +162,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     public void runNow(MonitorVo monitor,Boolean isSystemRun) {
 
         Database db = DbUtil.getDb(monitor.getDbSource());
-
+        
         //处理sql 等
         DataSourceEnum dataSourceEnum = DataSourceEnum.valueOf(monitor.getDbSource());
 
@@ -182,7 +184,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
             throw new RuntimeException("暂不支持mongodb");
         }
 
-        transactionTemplate.setTimeout(1);//TODO 测试timeout 之后去掉
+        //transactionTemplate.setTimeout(1);//TODO 测试timeout 之后去掉
         transactionTemplate.execute(status -> {
             //处理返回值
             execLogService.saveLogAndDecideNotity(monitor, result);
