@@ -131,6 +131,7 @@ public class DataSourceConfig
     @Bean(name = "transactionManager")
     public PlatformTransactionManager transactionManager() {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(dataSource());
+        transactionManager.setDefaultTimeout(1);
         return transactionManager;
     }
 

@@ -39,7 +39,7 @@ public class MonitorServiceTest extends BaseTest{
         MonitorVo monitorVo = Converter.convert(monitor,MonitorVo.class);
 
         jpaEntityUtil.supportJpaEntity(o -> {
-            monitorService.runNow(monitorVo);
+            monitorService.runNow(monitorVo,Boolean.FALSE);
             return null;
         });
 

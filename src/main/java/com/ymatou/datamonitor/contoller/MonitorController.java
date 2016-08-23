@@ -121,7 +121,7 @@ public class MonitorController {
     public Object runNow(MonitorVo monitorVo){
         Monitor monitor = monitorService.findById(monitorVo.getId());
 
-        monitorService.runNow(MonitorVo.from(monitor));
+        monitorService.runNow(MonitorVo.from(monitor),Boolean.FALSE);
         
         return WapperUtil.success();
     }

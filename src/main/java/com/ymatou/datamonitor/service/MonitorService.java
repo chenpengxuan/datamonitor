@@ -62,7 +62,7 @@ public interface MonitorService extends BaseService<Monitor> {
      * 
      * @param monitorVo
      */
-    void runNow(MonitorVo monitorVo);
+    void runNow(MonitorVo monitorVo,Boolean isSystemRun);
 
     /**
      * 获取所有任务

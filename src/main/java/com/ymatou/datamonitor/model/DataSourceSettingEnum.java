@@ -36,7 +36,12 @@ public enum DataSourceSettingEnum {
 
     testWhileIdle("true"),
 
-    testOnBorrow("false");
+    testOnBorrow("false"),
+    /**
+     * datasource 单位秒
+     * 查询timeout throws SQLException;
+     */
+    queryTimeout("30");
 
     String value;
 

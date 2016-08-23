@@ -3,6 +3,7 @@
  */
 package com.ymatou.datamonitor.service.impl;
 
+import javax.sql.DataSource;
 import javax.transaction.Transactional;
 
 import com.alibaba.druid.sql.PagerUtils;
@@ -19,6 +20,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -30,9 +32,13 @@ import com.ymatou.datamonitor.model.pojo.Monitor;
 import com.ymatou.datamonitor.model.vo.MonitorVo;
 import com.ymatou.datamonitor.service.MonitorService;
 import com.ymatou.datamonitor.service.SchedulerService;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.ymatou.datamonitor.util.Constants.JOB_SPEC;
 
@@ -56,6 +62,10 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     
     @Autowired
     private ExecLogService execLogService;
+    @Autowired
+    private TransactionTemplate transactionTemplate;
+    @Autowired
+    private DataSource dataSource;
 
     @Autowired
     public MonitorServiceImpl(MonitorRepository monitorRepository) {
@@ -147,7 +157,8 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     }
 
     @Override
-    public void runNow(MonitorVo monitor) {
+    public void runNow(MonitorVo monitor,Boolean isSystemRun) {
+
         Database db = DbUtil.getDb(monitor.getDbSource());
 
         //处理sql 等
@@ -159,7 +170,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
             String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
             Long count = db.select(countSql).getAs(Long.class).toBlocking().single();
 
-            if(count > 1000L){
+            if(count > 1000){
                 sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
             }
 
@@ -171,8 +182,22 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
             throw new RuntimeException("暂不支持mongodb");
         }
 
-        //处理返回值
-        execLogService.saveLogAndDecideNotity(monitor,result);
+        transactionTemplate.setTimeout(1);
+        transactionTemplate.execute(status -> {
+            //处理返回值
+            execLogService.saveLogAndDecideNotity(monitor, result);
+            Monitor m = MonitorVo.to(monitor);
+            if (isSystemRun) {
+                try {
+                    m.setNextFireTime(schedulerService.getNextFireTime(JOB_SPEC + monitor.getId()));
+                } catch (SchedulerException e) {
+                    logger.info("error setNextFireTime", e);
+                }
+            }
+            save(m);
+            return null;
+        });
+
     }
 
     @Override

@@ -6,10 +6,17 @@
 
 package com.ymatou.datamonitor.dbtest;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.druid.sql.PagerUtils;
+import com.ymatou.datamonitor.config.DbUtil;
+import com.ymatou.datamonitor.config.MonitorDataSourceConfig;
+import com.ymatou.datamonitor.model.DataSourceEnum;
 import org.junit.Test;
 
 import com.alibaba.druid.pool.DruidDataSource;
@@ -17,6 +24,11 @@ import com.github.davidmoten.rx.jdbc.Database;
 import com.ymatou.datamonitor.model.DataSourceSettingEnum;
 import com.ymatou.datamonitor.model.DbEnum;
 import com.ymatou.datamonitor.util.MapResultSet;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
+
+import javax.sql.DataSource;
+import javax.transaction.TransactionManager;
 
 /**
  * @author luoshiqian 2016/8/17 17:25
@@ -96,7 +108,7 @@ public class DbTest {
 
 
     @Test
-    public void PageTest(){
+    public void pageTest(){
 
         String sqlSqlserver = PagerUtils.count("select * from ymt_orders order by daddtime desc",DbEnum.sqlserver.name());
         String sqlMysql = PagerUtils.count("select * from ymt_orders order by daddtime desc",DbEnum.mysql.name());
@@ -114,4 +126,71 @@ public class DbTest {
 
     }
 
+
+    @Test
+    public void testTimeout(){
+
+        getDataSource();
+
+
+//        Connection connection = DataSourceUtils.getConnection(dataSource);
+
+//        try {
+//            Statement s = connection.createStatement();
+//            s.setQueryTimeout(1);
+//            System.out.println(System.currentTimeMillis());
+//            ResultSet resultSet = s.executeQuery("select top 100000 * from ymt_orders order by sphone");
+//            System.out.println(System.currentTimeMillis());
+////            while (resultSet.next()){
+//////                System.out.println(resultSet.getObject(1));
+////            }
+////
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+        System.out.println(System.currentTimeMillis());
+        //执行sql
+        List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100000 * from ymt_orders order by sphone")
+                .get(new MapResultSet())
+                .toList().toBlocking().single();
+        System.out.println(System.currentTimeMillis());
+        System.out.println(result);
+
+    }
+
+
+    private DataSource getDataSource(){
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setDbType("sqlserver");
+        dataSource.setUrl("jdbc:jtds:sqlserver://172.16.110.153:1433/YmtRelease");
+        dataSource.setUsername("YmtRelease");
+        dataSource.setPassword("123456");
+        dataSource.setTimeBetweenConnectErrorMillis(Integer.valueOf(DataSourceSettingEnum.maxWait.getValue()));
+        dataSource.setMinEvictableIdleTimeMillis(Integer.valueOf(DataSourceSettingEnum.maxWait.getValue()));
+        dataSource.setValidationQuery(DataSourceSettingEnum.validationQuery.getValue());
+        dataSource.setTestWhileIdle(Boolean.valueOf(DataSourceSettingEnum.testWhileIdle.getValue()));
+        dataSource.setTestOnBorrow(Boolean.valueOf(DataSourceSettingEnum.testOnBorrow.getValue()));
+        dataSource.setDefaultAutoCommit(false);
+        dataSource.setQueryTimeout(Integer.valueOf(DataSourceSettingEnum.queryTimeout.getValue()));
+        dataSource.setTransactionThresholdMillis(1000L);
+        dataSource.setTransactionQueryTimeout(1);
+
+        DbUtil.addDataBase(DataSourceEnum.ymtRelease,dataSource);
+        return dataSource;
+    }
+    @Test
+    public void testTransactionTimeout()throws Exception{
+
+        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(getDataSource());
+        transactionManager.setDefaultTimeout(1);
+
+        System.out.println(System.currentTimeMillis());
+        //执行sql
+        List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100000 * from ymt_orders order by sphone")
+                .get(new MapResultSet())
+                .toList().toBlocking().single();
+        System.out.println(System.currentTimeMillis());
+        System.out.println(result);
+
+    }
 }
