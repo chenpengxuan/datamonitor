@@ -8,6 +8,9 @@ import javax.transaction.Transactional;
 
 import com.alibaba.druid.sql.PagerUtils;
 import com.github.davidmoten.rx.jdbc.Database;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.ymatou.datamonitor.config.DbUtil;
 import com.ymatou.datamonitor.model.DataSourceEnum;
 import com.ymatou.datamonitor.model.DbEnum;
@@ -34,6 +37,8 @@ import com.ymatou.datamonitor.service.MonitorService;
 import com.ymatou.datamonitor.service.SchedulerService;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.Date;
 import java.util.List;
@@ -64,8 +69,6 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     private ExecLogService execLogService;
     @Autowired
     private TransactionTemplate transactionTemplate;
-    @Autowired
-    private DataSource dataSource;
 
     @Autowired
     public MonitorServiceImpl(MonitorRepository monitorRepository) {
@@ -164,28 +167,35 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
         //处理sql 等
         DataSourceEnum dataSourceEnum = DataSourceEnum.valueOf(monitor.getDbSource());
 
-        List<Map<String, Object>> result;
-        if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
-            String sql = monitor.getSql();
-            String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
-            Long count = db.select(countSql).getAs(Long.class).toBlocking().single();
+        List<Map<String, Object>> result = Lists.newArrayList();
+        String sql = "";
+        try {
+            if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
+                sql= monitor.getSql();
+                String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
+                Long count = db.select(countSql).getAs(Long.class).toBlocking().single();
 
-            if(count > 1000){
-                sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
+                if(count > 1000){
+                    sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
+                }
+
+                //执行sql
+                result = db.select(sql)
+                        .get(new MapResultSet())
+                        .toList().toBlocking().single();
+            }else {
+                throw new RuntimeException("暂不支持mongodb");
             }
-
-            //执行sql
-            result = db.select(sql)
-                    .get(new MapResultSet())
-                    .toList().toBlocking().single();
-        }else {
-            throw new RuntimeException("暂不支持mongodb");
+        } catch (Exception e) {
+            //出现异常 比如查询超时等 日志需要记录下来
+            result.add(ImmutableMap.of("sql",sql,"error",getPrintStackTraceMessage(e)));
+            monitor.setQueryError(true);
         }
 
-        transactionTemplate.setTimeout(1);//TODO 测试timeout 之后去掉
+        final List<Map<String, Object>> resultFinal = result;
         transactionTemplate.execute(status -> {
             //处理返回值
-            execLogService.saveLogAndDecideNotity(monitor, result);
+            execLogService.saveLogAndDecideNotity(monitor, resultFinal);
             Monitor m = MonitorVo.to(monitor);
             if (isSystemRun) {
                 try {
@@ -200,6 +210,17 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
 
     }
 
+    private String getPrintStackTraceMessage(Exception e) {
+        ByteArrayOutputStream buf = new java.io.ByteArrayOutputStream();
+        e.printStackTrace(new java.io.PrintWriter(buf, true));
+        String str = buf.toString();
+        try {
+            buf.close();
+        } catch (IOException e1) {
+            //ignore
+        }
+        return str;
+    }
     @Override
     public Page<MonitorVo> listMonitor(MonitorVo monitorVo, Pageable pageable) {
         Page<MonitorVo> monitorVos = monitorMapper.findByMonitorVo(monitorVo, pageable);
