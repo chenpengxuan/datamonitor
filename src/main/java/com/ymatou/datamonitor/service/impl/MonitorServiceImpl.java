@@ -182,7 +182,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
             throw new RuntimeException("暂不支持mongodb");
         }
 
-        transactionTemplate.setTimeout(1);
+        transactionTemplate.setTimeout(1);//TODO 测试timeout 之后去掉
         transactionTemplate.execute(status -> {
             //处理返回值
             execLogService.saveLogAndDecideNotity(monitor, result);
