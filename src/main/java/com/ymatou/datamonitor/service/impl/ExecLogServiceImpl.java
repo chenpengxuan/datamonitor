@@ -102,7 +102,7 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         }
         sb.append("</tr>");
         
-        for(int index = 1; index < result.get(0).size(); index++){
+        for(int index = 0; index < result.size(); index++){
             sb.append("<tr>");
             for(Entry<String, Object> entry : result.get(index).entrySet()){
                 if(entry.getValue() instanceof Date){
@@ -115,7 +115,7 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
             }
             sb.append("</tr>");
         }
-        sb.append("</table></body></html>");
+        sb.append("</table><br/><br/><br/></body></html>");
         
         return sb.toString();
     }

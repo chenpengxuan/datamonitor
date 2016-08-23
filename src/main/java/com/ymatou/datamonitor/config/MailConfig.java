@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * @author knightliao
  */
-@ConfigurationProperties(prefix="mail")
+@ConfigurationProperties(prefix="email")
 public class MailConfig {
 
     private String emailHost;

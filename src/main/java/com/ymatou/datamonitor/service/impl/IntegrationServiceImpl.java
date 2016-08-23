@@ -56,7 +56,7 @@ public class IntegrationServiceImpl implements IntegrationService{
     @Override
     public boolean sendHtmlEmail(String mailTo, String title, String content) {
         StringBuilder sb = new StringBuilder().append("send to: ").append(mailTo)
-                    .append("title: ").append(title).append("content: ").append(content);
+                    .append("; title: ").append(title).append("; content: ").append(content);
         logger.info(sb.toString());
 
         if (StringUtils.isBlank(mailTo) || StringUtils.isBlank(content) || StringUtils.isBlank(title)) {
