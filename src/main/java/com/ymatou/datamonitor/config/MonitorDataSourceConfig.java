@@ -50,8 +50,7 @@ public class MonitorDataSourceConfig {
         dataSource.setTestOnBorrow(Boolean.valueOf(DataSourceSettingEnum.testOnBorrow.getValue()));
         dataSource.setDefaultAutoCommit(false);
         dataSource.setQueryTimeout(Integer.valueOf(DataSourceSettingEnum.queryTimeout.getValue()));
-        dataSource.setTransactionThresholdMillis(1000L);
-        dataSource.setTransactionQueryTimeout(1);
+        dataSource.setTransactionQueryTimeout(Integer.valueOf(DataSourceSettingEnum.queryTimeout.getValue()));
         return dataSource;
     }
 }
