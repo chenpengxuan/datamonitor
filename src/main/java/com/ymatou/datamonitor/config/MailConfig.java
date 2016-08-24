@@ -15,7 +15,6 @@ public class MailConfig {
     private String fromEmail;
     private String emailReceiver;
     private boolean emailMonitorOn;
-    private String domain;
 
     public String getEmailHost() {
         return emailHost;
@@ -71,14 +70,6 @@ public class MailConfig {
 
     public void setEmailReceiver(String emailReceiver) {
         this.emailReceiver = emailReceiver;
-    }
-
-    public String getDomain() {
-        return domain;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
     }
 
     @Override
