@@ -51,7 +51,7 @@ ext {
     rxJavaVersion = "1.1.9"
     rxJavaJdbcVersion = "0.7.2"
     junitVersion = "4.11"
-    quartzVersion = "2.1.3"
+    quartzVersion = "2.2.3"
     javaxMailVersion = "1.4.7"
 }
 

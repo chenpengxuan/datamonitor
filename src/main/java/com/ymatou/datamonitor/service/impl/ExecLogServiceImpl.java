@@ -77,12 +77,12 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         repository.save(execLog);
 
         //处理邮件 或短信
-        if(null != monitor.getEmailThreshold() && resultCount > monitor.getEmailThreshold()){
+        if((null != monitor.getEmailThreshold() && resultCount > monitor.getEmailThreshold()) || monitor.isQueryError()){
             String html = generateHtml(monitor, result);
             integrationService.sendHtmlEmail(monitor.getEmails(), monitor.getNotifyTitle(), html);
         }
 
-        if(null != monitor.getPhoneThreshold() && resultCount > monitor.getPhoneThreshold()){
+        if(null != monitor.getPhoneThreshold() && resultCount > monitor.getPhoneThreshold() || monitor.isQueryError()){
             integrationService.sendMessage(monitor.getPhones(), 
                     String.format("Monitor[%s]Threshold[%s]CurrentCount[%s]", 
                             monitor.getName(), monitor.getPhoneThreshold(),resultCount));
