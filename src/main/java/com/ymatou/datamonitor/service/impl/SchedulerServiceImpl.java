@@ -35,7 +35,7 @@ public class SchedulerServiceImpl implements SchedulerService{
         JobDetail jobDetail = JobBuilder.newJob(job)
                 .withIdentity(jobName)
                 //.storeDurably(false)    //Job是非持久性的，若没有活动的Trigger与之相关联，该Job会从Scheduler中删除掉
-                .requestRecovery(true) //Scheduler非正常停止(进程停止或机器关闭等)时，Scheduler再次启动时，该Job会重新执行一次
+                //.requestRecovery(true) //Scheduler非正常停止(进程停止或机器关闭等)时，Scheduler再次启动时，该Job会重新执行一次
                 .build();
         Trigger trigger = TriggerBuilder.newTrigger()
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression)

@@ -17,6 +17,10 @@ public class BizConfig {
     private String smsUrl;
     
     private String domain;
+    
+    private String env;
+    
+    private boolean phoneMonitorOn;
 
     public String getLdapUrl() {
         return ldapUrl;
@@ -40,5 +44,21 @@ public class BizConfig {
 
     public void setDomain(String domain) {
         this.domain = domain;
+    }
+
+    public String getEnv() {
+        return env;
+    }
+
+    public void setEnv(String env) {
+        this.env = env;
+    }
+
+    public boolean isPhoneMonitorOn() {
+        return phoneMonitorOn;
+    }
+
+    public void setPhoneMonitorOn(boolean phoneMonitorOn) {
+        this.phoneMonitorOn = phoneMonitorOn;
     }
 }
