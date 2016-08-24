@@ -111,7 +111,7 @@ public class DataSourceConfig
         JpaDialect jpaDialect = new HibernateJpaDialect();
 
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
         properties.setProperty("hibernate.show_sql", "true");
         entityManagerFactory.setPackagesToScan("com.ymatou.datamonitor.model");
         entityManagerFactory.setJpaProperties(properties);
