@@ -26,13 +26,13 @@
    |     --- dependency-cache  
    |     --- dist  
    |     --- --- bin  
-   |     --- --- --- restkeeper.sh  
+   |     --- --- --- datamonitor.sh  
    |     --- --- --- start.sh  
    |     --- --- --- stop.sh  
    |     --- --- conf  
    |     --- --- lib  
    |     --- distributions  
-   |     --- --- restkeeper.zip   
+   |     --- --- datamonitor.zip   
    
   
-   取dist 文件夹所有内容进行发布 或者使用restkeeper.zip
+   取dist 文件夹所有内容进行发布 或者使用datamonitor.zip
