@@ -3,17 +3,15 @@
  */
 package com.ymatou.datamonitor.service.impl;
 
+import static com.ymatou.datamonitor.util.Constants.JOB_SPEC;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 import javax.transaction.Transactional;
 
-import com.alibaba.druid.sql.PagerUtils;
-import com.github.davidmoten.rx.jdbc.Database;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.ymatou.datamonitor.config.DbUtil;
-import com.ymatou.datamonitor.model.DataSourceEnum;
-import com.ymatou.datamonitor.model.DbEnum;
-import com.ymatou.datamonitor.service.ExecLogService;
-import com.ymatou.datamonitor.util.MapResultSet;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,26 +19,26 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionTemplate;
 
+import com.alibaba.druid.sql.PagerUtils;
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
+import com.ymatou.datamonitor.config.DbUtil;
 import com.ymatou.datamonitor.dao.jpa.MonitorRepository;
 import com.ymatou.datamonitor.dao.mapper.MonitorMapper;
+import com.ymatou.datamonitor.model.DataSourceEnum;
+import com.ymatou.datamonitor.model.DbEnum;
 import com.ymatou.datamonitor.model.RunStatusEnum;
 import com.ymatou.datamonitor.model.StatusEnum;
 import com.ymatou.datamonitor.model.pojo.Monitor;
 import com.ymatou.datamonitor.model.vo.MonitorVo;
+import com.ymatou.datamonitor.service.ExecLogService;
 import com.ymatou.datamonitor.service.MonitorService;
 import com.ymatou.datamonitor.service.SchedulerService;
-import org.springframework.transaction.support.TransactionTemplate;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
-import static com.ymatou.datamonitor.util.Constants.JOB_SPEC;
 
 /**
  * 
@@ -157,27 +155,24 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     @Override
     public void runNow(MonitorVo monitor,Boolean isSystemRun) {
 
-        Database db = DbUtil.getDb(monitor.getDbSource());
-
         //处理sql 等
         DataSourceEnum dataSourceEnum = DataSourceEnum.valueOf(monitor.getDbSource());
 
         List<Map<String, Object>> result = Lists.newArrayList();
         String sql = "";
+        logger.info("begin run monitor");
+
+        JdbcTemplate jdbcTemplate = DbUtil.getJdbcTemplate(monitor.getDbSource());
         try {
             if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
                 sql= monitor.getSql();
                 String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
-                Long count = db.select(countSql).getAs(Long.class).toBlocking().single();
 
+                Long count = jdbcTemplate.queryForObject(countSql,Long.class);
                 if(count > 1000){
                     sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
                 }
-
-                //执行sql
-                result = db.select(sql)
-                        .get(new MapResultSet())
-                        .toList().toBlocking().single();
+                result = jdbcTemplate.queryForList(sql);
             }else {
                 throw new RuntimeException("暂不支持mongodb");
             }
@@ -185,13 +180,8 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
             //出现异常 比如查询超时等 日志需要记录下来
             result.add(ImmutableMap.of("sql",sql,"error",getPrintStackTraceMessage(e)));
             monitor.setQueryError(true);
-        } finally {
-            try {
-                db.getConnectionProvider().get().close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
+        logger.info("end run monitor");
 
         final List<Map<String, Object>> resultFinal = result;
         transactionTemplate.execute(status -> {
@@ -224,6 +214,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     }
     @Override
     public Page<MonitorVo> listMonitor(MonitorVo monitorVo, Pageable pageable) {
+
         Page<MonitorVo> monitorVos = monitorMapper.findByMonitorVo(monitorVo, pageable);
 
         return monitorVos;

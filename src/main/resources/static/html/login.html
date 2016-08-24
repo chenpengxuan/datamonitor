@@ -38,6 +38,14 @@
 
     var loginUrl = "/auth";
     var successUrl = "index.html";
+
+    document.onkeydown=function(event){
+      if (event.keyCode == 13){
+        $("#loginBtn").click();
+      }
+    };
+
+
     function login(){
       var usernameVal = $("#username").val();
       var passwordVal = $("#password").val();

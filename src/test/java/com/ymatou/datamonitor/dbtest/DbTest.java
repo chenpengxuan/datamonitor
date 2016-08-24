@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.alibaba.druid.sql.PagerUtils;
 import com.ymatou.datamonitor.config.DbUtil;
@@ -24,8 +25,10 @@ import com.github.davidmoten.rx.jdbc.Database;
 import com.ymatou.datamonitor.model.DataSourceSettingEnum;
 import com.ymatou.datamonitor.model.DbEnum;
 import com.ymatou.datamonitor.util.MapResultSet;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import javax.transaction.TransactionManager;
@@ -184,13 +187,36 @@ public class DbTest {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager(getDataSource());
         transactionManager.setDefaultTimeout(1);
 
-        System.out.println(System.currentTimeMillis());
-        //执行sql
-        List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100 * from ymt_paymentinstruction where PayGetwayCallBack is not null")
-                .get(new MapResultSet())
-                .toList().toBlocking().single();
-        System.out.println(System.currentTimeMillis());
-        System.out.println(result);
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+
+        transactionTemplate.setTimeout(1);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(transactionManager.getDataSource());
+        transactionTemplate.execute(status -> {
+
+            System.out.println(System.currentTimeMillis());
+            try {
+                TimeUnit.SECONDS.sleep(2L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                Connection connection = transactionManager.getDataSource().getConnection();
+                connection.createStatement().execute("select top 100000 * from ymt_orders order by sphone");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+
+//            jdbcTemplate.execute("\"select top 100000 * from ymt_orders order by sphone\"");
+//            //执行sql
+//            List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100000 * from ymt_orders order by sphone")
+//                    .get(new MapResultSet())
+//                    .toList().toBlocking().single();
+//            System.out.println(System.currentTimeMillis());
+//            System.out.println(result);
+            return null;
+        });
+
 
     }
 }
