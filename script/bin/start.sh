@@ -2,8 +2,8 @@
 
 source "/etc/profile"
 GCLOGPATH="logs/gc.log"
-MAIN_CLASS="com.ymatou.restkeeper.Application"
-APP_NAME="restkeeper.ymatou.cn"
+MAIN_CLASS="com.ymatou.datamonitor.Application"
+APP_NAME="datamonitor.ymatou.cn"
 CLASS_PATH="lib/*:conf"
 JAVA_OPTS="-Xms1096M -Xmx1096M -Xmn500M -XX:PermSize=256M -XX:MaxPermSize=512M \
     -XX:+UseConcMarkSweepGC -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=75 \

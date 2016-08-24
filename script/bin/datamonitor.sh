@@ -2,7 +2,7 @@
 
 source "/etc/profile"
 GCLOGPATH="logs/gc.log"
-MAIN_CLASS="com.ymatou.restkeeper.Application"
+MAIN_CLASS="com.ymatou.datamonitor.Application"
 CLASS_PATH="lib/*:conf"
 JAVA_OPTS="-Xms1024M -Xmx1024M -Xmn380M \
     -XX:+UseConcMarkSweepGC -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=75 \
