@@ -20,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.ymatou.datamonitor.config.BizConfig;
+import com.ymatou.datamonitor.config.MailConfig;
 import com.ymatou.datamonitor.dao.jpa.ExecLogRepository;
 import com.ymatou.datamonitor.dao.mapper.ExecLogMapper;
 import com.ymatou.datamonitor.model.pojo.ExecLog;
@@ -42,6 +44,12 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
     
     @Autowired
     private IntegrationService integrationService;
+    
+    @Autowired
+    private MailConfig mailConfig;
+    
+    @Autowired
+    private BizConfig bizConfig;
 
     @Autowired
     public ExecLogServiceImpl(ExecLogRepository repository) {
@@ -77,15 +85,18 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         repository.save(execLog);
 
         //处理邮件 或短信
-        if((null != monitor.getEmailThreshold() && resultCount > monitor.getEmailThreshold()) || monitor.isQueryError()){
+        if((null != monitor.getEmailThreshold() && resultCount > monitor.getEmailThreshold() 
+                && mailConfig.isEmailMonitorOn()) || monitor.isQueryError()){
             String html = generateHtml(monitor, result);
             integrationService.sendHtmlEmail(monitor.getEmails(), monitor.getNotifyTitle(), html);
         }
 
-        if(null != monitor.getPhoneThreshold() && resultCount > monitor.getPhoneThreshold() || monitor.isQueryError()){
+        if(null != monitor.getPhoneThreshold() && resultCount > monitor.getPhoneThreshold() 
+                && bizConfig.isPhoneMonitorOn() || monitor.isQueryError()){
             integrationService.sendMessage(monitor.getPhones(), 
-                    String.format("Monitor[%s]Threshold[%s]CurrentCount[%s]", 
-                            monitor.getName(), monitor.getPhoneThreshold(),resultCount));
+                    String.format("Env[%s] Monitor[%s] ExecTime[%s] Threshold[%s] CurrentCount[%s]", 
+                            bizConfig.getEnv(),monitor.getName(), new SimpleDateFormat("yyyyMMdd hh:mm:ss").format(new Date()),
+                            monitor.getPhoneThreshold(),resultCount));
         }
     }
     
@@ -94,8 +105,8 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         sb.append("<!DOCTYPE html><html><head>")
           .append("<meta charset='utf-8'><meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>")
           .append("</head><body><h3>")
-          .append(String.format("Monitor[%s] ExecTime[%s] Threshold[%s] CurrentCount[%s] ResultSet: ", 
-                  monitor.getName(), new SimpleDateFormat("yyyyMMdd hh:mm:ss").format(new Date()), 
+          .append(String.format("Env[%s] Monitor[%s] ExecTime[%s] Threshold[%s] CurrentCount[%s] ResultSet: ", 
+                  bizConfig.getEnv(), monitor.getName(), new SimpleDateFormat("yyyyMMdd hh:mm:ss").format(new Date()), 
                   monitor.getEmailThreshold(), result.size()))
           .append("</h3><table border='1'><tr>");
         for(Entry<String, Object> entry : result.get(0).entrySet()){
