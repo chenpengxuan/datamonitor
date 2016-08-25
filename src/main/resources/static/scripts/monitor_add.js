@@ -19,7 +19,7 @@
   function monitorAddCtrl($scope,$stateParams,$state,$http) {
 
     $scope.obj = {};
-
+      
     $('#cronReadMe').on('click', function(){
       var that = this;
       var str =
