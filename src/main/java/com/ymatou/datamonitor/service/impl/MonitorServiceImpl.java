@@ -7,6 +7,7 @@ import static com.ymatou.datamonitor.util.Constants.JOB_SPEC;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -60,6 +61,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
     
     @Autowired
     private ExecLogService execLogService;
+    
     @Autowired
     private TransactionTemplate transactionTemplate;
 
@@ -188,6 +190,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
             //处理返回值
             execLogService.saveLogAndDecideNotity(monitor, resultFinal);
             Monitor m = MonitorVo.to(monitor);
+            m.setLastFireTime(new Date());
             if (isSystemRun) {
                 try {
                     m.setNextFireTime(schedulerService.getNextFireTime(JOB_SPEC + monitor.getId()));
