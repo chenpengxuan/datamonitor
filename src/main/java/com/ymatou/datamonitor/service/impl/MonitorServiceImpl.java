@@ -168,12 +168,13 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
         try {
             if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
                 sql= monitor.getSql();
-                String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
-
-                Long count = jdbcTemplate.queryForObject(countSql,Long.class);
-                if(count > 1000){
-                    sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
-                }
+//                String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
+//
+//                Long count = jdbcTemplate.queryForObject(countSql,Long.class);
+//                if(count > 1000){
+//                    sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
+//                }
+                sql = String.format("select top 1000 * from ( %s ) topTab", sql);
                 result = jdbcTemplate.queryForList(sql);
             }else {
                 throw new RuntimeException("暂不支持mongodb");
