@@ -28,9 +28,13 @@ public class MonitorDataSourceConfig {
     @Bean(name = "ymtReleaseDataSource")
     public DataSource ymtReleaseDataSource() {
 
-        DruidDataSource dataSource = newDataSource(connectionConfig.getYmtRelease(), DataSourceEnum.ymtRelease.getDbEnum());
+        DruidDataSource dataSource =
+                newDataSource(connectionConfig.getYmtRelease(), DataSourceEnum.ymtRelease.getDbEnum());
+        DruidDataSource qickTurnOverDs =
+                newDataSource(connectionConfig.getQuickTurnOver(), DataSourceEnum.quickTurnOver.getDbEnum());
 
         DbUtil.addDataBase(DataSourceEnum.ymtRelease, dataSource);
+        DbUtil.addDataBase(DataSourceEnum.quickTurnOver, qickTurnOverDs);
         return dataSource;
     }
 

@@ -20,7 +20,7 @@ public class ConnectionConfig {
     private Integer minIdle;
     private Integer maxActive;
     private DbSource ymtRelease;
-
+    private DbSource quickTurnOver;
 
     public String getDriver() {
         return driver;
@@ -84,5 +84,13 @@ public class ConnectionConfig {
 
     public void setMaxActive(Integer maxActive) {
         this.maxActive = maxActive;
+    }
+
+    public DbSource getQuickTurnOver() {
+        return quickTurnOver;
+    }
+
+    public void setQuickTurnOver(DbSource quickTurnOver) {
+        this.quickTurnOver = quickTurnOver;
     }
 }

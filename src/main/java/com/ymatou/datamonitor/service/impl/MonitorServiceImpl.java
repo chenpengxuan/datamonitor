@@ -13,6 +13,7 @@ import java.util.Map;
 
 import javax.transaction.Transactional;
 
+import com.ymatou.datamonitor.util.Constants;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -174,7 +175,11 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
 //                if(count > 1000){
 //                    sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
 //                }
-                sql = String.format("select top 1000 * from ( %s ) topTab", sql);
+                if(dataSourceEnum.getDbEnum() == DbEnum.sqlserver){
+                    sql = String.format(Constants.LIMIT_MSSQL_TEMPLATE, sql);
+                }else {
+                    sql = String.format(Constants.LIMIT_MYSQL_TEMPLATE, sql);
+                }
                 result = jdbcTemplate.queryForList(sql);
             }else {
                 throw new RuntimeException("暂不支持mongodb");

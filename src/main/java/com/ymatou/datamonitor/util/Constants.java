@@ -23,4 +23,7 @@ public class Constants {
      * 发送报警邮件中邮件标题信息
      */
     public static final String ALARM_MAIL_TITLE = "fatal message mail ";
+
+    public static final String LIMIT_MYSQL_TEMPLATE = "select  * from ( %s ) topTab limit 1000";
+    public static final String LIMIT_MSSQL_TEMPLATE = "select top 1000 * from ( %s ) topTab";
 }

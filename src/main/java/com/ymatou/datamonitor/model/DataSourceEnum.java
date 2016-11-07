@@ -12,7 +12,8 @@ package com.ymatou.datamonitor.model;
  */
 public enum DataSourceEnum {
 
-    ymtRelease(DbEnum.sqlserver)
+    ymtRelease(DbEnum.sqlserver),
+    quickTurnOver(DbEnum.mysql)
     ;
     DbEnum dbEnum;
 
