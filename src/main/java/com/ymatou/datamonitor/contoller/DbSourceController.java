@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ymatou.datamonitor.service.MonitorService;
 import com.ymatou.datamonitor.util.WapperUtil;
 
+import static com.ymatou.datamonitor.config.DbUtil.datasourceMap;
+
 /**
  * 
  * @author qianmin 2016年8月18日 下午2:41:41
@@ -34,7 +36,7 @@ public class DbSourceController {
     @RequestMapping(path = "/getAll")
     public Object getAll(){
 
-        return WapperUtil.success(DataSourceEnum.values());
+        return WapperUtil.success(datasourceMap.keySet());
     }
     
 

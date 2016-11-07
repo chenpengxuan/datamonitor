@@ -6,17 +6,19 @@
 
 package com.ymatou.datamonitor.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.CollectionUtils;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.ymatou.datamonitor.model.DataSourceEnum;
 import com.ymatou.datamonitor.model.DataSourceSettingEnum;
-import com.ymatou.datamonitor.model.DbEnum;
 
 
 @Configuration
@@ -25,25 +27,25 @@ public class MonitorDataSourceConfig {
     @Autowired
     private ConnectionConfig connectionConfig;
 
-    @Bean(name = "ymtReleaseDataSource")
-    public DataSource ymtReleaseDataSource() {
+    @Bean(name = "monitorDataSourceList")
+    public List<DataSource> monitorDataSourceList() {
 
-        DruidDataSource dataSource =
-                newDataSource(connectionConfig.getYmtRelease(), DataSourceEnum.ymtRelease.getDbEnum());
-        DruidDataSource qickTurnOverDs =
-                newDataSource(connectionConfig.getQuickTurnOver(), DataSourceEnum.quickTurnOver.getDbEnum());
-
-        DbUtil.addDataBase(DataSourceEnum.ymtRelease, dataSource);
-        DbUtil.addDataBase(DataSourceEnum.quickTurnOver, qickTurnOverDs);
-        return dataSource;
+        List<DataSource> list = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(connectionConfig.getDbSources())) {
+            for (DbSource dbSource : connectionConfig.getDbSources()) {
+                DruidDataSource dataSource = newDataSource(dbSource);
+                DbUtil.addDataBase(dbSource.getDbName(), dataSource);
+                list.add(dataSource);
+            }
+        }
+        return list;
     }
 
 
-
-    public DruidDataSource newDataSource(DbSource dbSource, DbEnum dbEnum) {
+    public DruidDataSource newDataSource(DbSource dbSource) {
 
         DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDbType(dbEnum.name());
+        dataSource.setDbType(dbSource.getDbType());
         dataSource.setUrl(dbSource.getUrl());
         dataSource.setUsername(dbSource.getUsername());
         dataSource.setPassword(dbSource.getPassword());

@@ -151,13 +151,13 @@ public class DbTest {
 //        } catch (SQLException e) {
 //            e.printStackTrace();
 //        }
-        System.out.println(System.currentTimeMillis());
-        //执行sql
-        List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100000 * from ymt_orders order by sphone")
-                .get(new MapResultSet())
-                .toList().toBlocking().single();
-        System.out.println(System.currentTimeMillis());
-        System.out.println(result);
+//        System.out.println(System.currentTimeMillis());
+//        //执行sql
+//        List<Map<String, Object>> result =  DbUtil.getDb("ymtRelease").select("select top 100000 * from ymt_orders order by sphone")
+//                .get(new MapResultSet())
+//                .toList().toBlocking().single();
+//        System.out.println(System.currentTimeMillis());
+//        System.out.println(result);
 
     }
 
@@ -178,7 +178,7 @@ public class DbTest {
         dataSource.setTransactionThresholdMillis(1000L);
         dataSource.setTransactionQueryTimeout(1);
 
-        DbUtil.addDataBase(DataSourceEnum.ymtRelease,dataSource);
+        DbUtil.addDataBase(DataSourceEnum.ymtRelease.name(),dataSource);
         return dataSource;
     }
     @Test

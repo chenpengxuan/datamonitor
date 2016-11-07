@@ -24,11 +24,11 @@ public class DbUtil {
     public static Map<String, DataSource> datasourceMap = Maps.newHashMap();
     public static Map<String, JdbcTemplate> jdbcTemplateMap = Maps.newHashMap();
 
-    public static void addDataBase(DataSourceEnum dataSourceEnum, DataSource dataSource) {
-        Database database = Database.fromDataSource(dataSource);
-        databaseMap.put(dataSourceEnum.name(), database);
-        datasourceMap.put(dataSourceEnum.name(), dataSource);
-        jdbcTemplateMap.put(dataSourceEnum.name(), new JdbcTemplate(dataSource));
+    public static void addDataBase(String dbName, DataSource dataSource) {
+//        Database database = Database.fromDataSource(dataSource);
+//        databaseMap.put(dataSourceEnum.name(), database);
+        datasourceMap.put(dbName, dataSource);
+        jdbcTemplateMap.put(dbName, new JdbcTemplate(dataSource));
     }
 
     public static Database getDb(String name) {

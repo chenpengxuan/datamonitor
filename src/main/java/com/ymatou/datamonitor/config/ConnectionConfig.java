@@ -7,6 +7,9 @@
 
 package com.ymatou.datamonitor.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix="jdbc")
@@ -19,8 +22,15 @@ public class ConnectionConfig {
     private Integer initialSize;
     private Integer minIdle;
     private Integer maxActive;
-    private DbSource ymtRelease;
-    private DbSource quickTurnOver;
+    private List<DbSource> dbSources = new ArrayList<>();
+
+    public List<DbSource> getDbSources() {
+        return dbSources;
+    }
+
+    public void setDbSources(List<DbSource> dbSources) {
+        this.dbSources = dbSources;
+    }
 
     public String getDriver() {
         return driver;
@@ -48,14 +58,6 @@ public class ConnectionConfig {
 
     public String getPassword() {
         return password;
-    }
-
-    public DbSource getYmtRelease() {
-        return ymtRelease;
-    }
-
-    public void setYmtRelease(DbSource ymtRelease) {
-        this.ymtRelease = ymtRelease;
     }
 
     public void setPassword(String password) {
@@ -86,11 +88,4 @@ public class ConnectionConfig {
         this.maxActive = maxActive;
     }
 
-    public DbSource getQuickTurnOver() {
-        return quickTurnOver;
-    }
-
-    public void setQuickTurnOver(DbSource quickTurnOver) {
-        this.quickTurnOver = quickTurnOver;
-    }
 }

@@ -12,9 +12,28 @@ package com.ymatou.datamonitor.config;
  */
 public class DbSource {
 
+    private String dbName;
+    private String dbType;
     private String url;
     private String username;
     private String password;
+
+    public String getDbName() {
+        return dbName;
+    }
+
+    public void setDbName(String dbName) {
+        this.dbName = dbName;
+    }
+
+    public String getDbType() {
+
+        return dbType;
+    }
+
+    public void setDbType(String dbType) {
+        this.dbType = dbType;
+    }
 
     public String getUrl() {
         return url;
