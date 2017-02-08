@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 public interface ExecLogService extends BaseService<ExecLog>  {
@@ -23,8 +24,9 @@ public interface ExecLogService extends BaseService<ExecLog>  {
      * 
      * @param monitorVo
      * @param result
+     * @param keys
      */
-    void saveLogAndDecideNotity(MonitorVo monitorVo, List<Map<String,Object>> result);
+    void saveLogAndDecideNotity(MonitorVo monitorVo, List<Map<String,Object>> result, Set<String> keys);
     
     /**
      * 获取执行日志

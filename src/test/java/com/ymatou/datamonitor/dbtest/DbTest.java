@@ -6,32 +6,24 @@
 
 package com.ymatou.datamonitor.dbtest;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import com.alibaba.druid.sql.PagerUtils;
-import com.ymatou.datamonitor.config.DbUtil;
-import com.ymatou.datamonitor.config.MonitorDataSourceConfig;
-import com.ymatou.datamonitor.model.DataSourceEnum;
-import org.junit.Test;
-
 import com.alibaba.druid.pool.DruidDataSource;
+import com.alibaba.druid.sql.PagerUtils;
 import com.github.davidmoten.rx.jdbc.Database;
+import com.ymatou.datamonitor.config.monitor.DataSourceCollections;
 import com.ymatou.datamonitor.model.DataSourceSettingEnum;
-import com.ymatou.datamonitor.model.DbEnum;
+import com.ymatou.datamonitor.model.DbTypeEnum;
 import com.ymatou.datamonitor.util.MapResultSet;
+import org.junit.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
-import javax.transaction.TransactionManager;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author luoshiqian 2016/8/17 17:25
@@ -73,7 +65,7 @@ public class DbTest {
 
         DruidDataSource dataSource = new DruidDataSource();
         // dataSource.setDriverClassName(connectionConfig.getDriver());
-        dataSource.setDbType(DbEnum.sqlserver.name());
+        dataSource.setDbType(DbTypeEnum.SQLServer.name());
         dataSource.setUrl("jdbc:jtds:sqlserver://172.16.188.81:1433/YmtAlpha");
         dataSource.setUsername("dev");
         dataSource.setPassword("123456");
@@ -113,15 +105,15 @@ public class DbTest {
     @Test
     public void pageTest(){
 
-        String sqlSqlserver = PagerUtils.count("select * from ymt_orders order by daddtime desc",DbEnum.sqlserver.name());
-        String sqlMysql = PagerUtils.count("select * from ymt_orders order by daddtime desc",DbEnum.mysql.name());
+        String sqlSqlserver = PagerUtils.count("select * from ymt_orders order by daddtime desc", DbTypeEnum.SQLServer.name());
+        String sqlMysql = PagerUtils.count("select * from ymt_orders order by daddtime desc", DbTypeEnum.MySQL.name());
 
         System.out.println(sqlSqlserver);
         System.out.println(sqlMysql);
 
 
-        String sqlSqlserver1 = PagerUtils.limit("select top 100 * from ymt_orders order by daddtime desc",DbEnum.sqlserver.name(),0,1000);
-        String sqlMysql1 = PagerUtils.limit("select * from ymt_orders order by daddtime desc",DbEnum.mysql.name(),0,1000);
+        String sqlSqlserver1 = PagerUtils.limit("select top 100 * from ymt_orders order by daddtime desc", DbTypeEnum.SQLServer.name(),0,1000);
+        String sqlMysql1 = PagerUtils.limit("select * from ymt_orders order by daddtime desc", DbTypeEnum.MySQL.name(),0,1000);
 
         System.out.println(sqlSqlserver1);
         System.out.println(sqlMysql1);
@@ -178,7 +170,7 @@ public class DbTest {
         dataSource.setTransactionThresholdMillis(1000L);
         dataSource.setTransactionQueryTimeout(1);
 
-        DbUtil.addDataBase(DataSourceEnum.ymtRelease.name(),dataSource);
+        DataSourceCollections.addDataBase("ymtRelease", "sqlserver",dataSource);
         return dataSource;
     }
     @Test

@@ -26,4 +26,5 @@ public class Constants {
 
     public static final String LIMIT_MYSQL_TEMPLATE = "select  * from ( %s ) topTab limit 1000";
     public static final String LIMIT_MSSQL_TEMPLATE = "select top 1000 * from ( %s ) topTab";
+    public static final String MONGO_SCRIPT_TEMPLATE = "function(){return %s.toArray();}";
 }

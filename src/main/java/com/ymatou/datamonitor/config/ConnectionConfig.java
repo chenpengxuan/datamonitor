@@ -7,12 +7,13 @@
 
 package com.ymatou.datamonitor.config;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.baidu.disconf.client.common.annotations.DisconfFile;
+import com.baidu.disconf.client.common.annotations.DisconfFileItem;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix="jdbc")
+@Component
+@DisconfFile(fileName = "db.properties")
 public class ConnectionConfig {
 
     private String driver;
@@ -22,16 +23,8 @@ public class ConnectionConfig {
     private Integer initialSize;
     private Integer minIdle;
     private Integer maxActive;
-    private List<DbSource> dbSources = new ArrayList<>();
 
-    public List<DbSource> getDbSources() {
-        return dbSources;
-    }
-
-    public void setDbSources(List<DbSource> dbSources) {
-        this.dbSources = dbSources;
-    }
-
+    @DisconfFileItem(name = "jdbc.driver")
     public String getDriver() {
         return driver;
     }
@@ -40,6 +33,7 @@ public class ConnectionConfig {
         this.driver = driver;
     }
 
+    @DisconfFileItem(name = "jdbc.url")
     public String getUrl() {
         return url;
     }
@@ -48,6 +42,7 @@ public class ConnectionConfig {
         this.url = url;
     }
 
+    @DisconfFileItem(name = "jdbc.username")
     public String getUsername() {
         return username;
     }
@@ -56,6 +51,7 @@ public class ConnectionConfig {
         this.username = username;
     }
 
+    @DisconfFileItem(name = "jdbc.password")
     public String getPassword() {
         return password;
     }
@@ -64,6 +60,7 @@ public class ConnectionConfig {
         this.password = password;
     }
 
+    @DisconfFileItem(name = "jdbc.initialSize")
     public Integer getInitialSize() {
         return initialSize;
     }
@@ -72,6 +69,7 @@ public class ConnectionConfig {
         this.initialSize = initialSize;
     }
 
+    @DisconfFileItem(name = "jdbc.minIdle")
     public Integer getMinIdle() {
         return minIdle;
     }
@@ -80,6 +78,7 @@ public class ConnectionConfig {
         this.minIdle = minIdle;
     }
 
+    @DisconfFileItem(name = "jdbc.maxActive")
     public Integer getMaxActive() {
         return maxActive;
     }

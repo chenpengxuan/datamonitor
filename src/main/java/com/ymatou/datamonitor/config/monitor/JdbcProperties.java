@@ -5,18 +5,29 @@
  *
  */
 
-package com.ymatou.datamonitor.config;
+package com.ymatou.datamonitor.config.monitor;
 
 /**
  * @author luoshiqian 2016/8/18 12:42
  */
-public class DbSource {
+public class JdbcProperties {
 
     private String dbName;
     private String dbType;
     private String url;
     private String username;
     private String password;
+
+    public JdbcProperties() {
+    }
+
+    public JdbcProperties(String dbName, String dbType, String url, String username, String password) {
+        this.dbName = dbName;
+        this.dbType = dbType;
+        this.url = url;
+        this.username = username;
+        this.password = password;
+    }
 
     public String getDbName() {
         return dbName;

@@ -7,9 +7,13 @@
 
 package com.ymatou.datamonitor.config;
 
+import com.baidu.disconf.client.common.annotations.DisconfFile;
+import com.baidu.disconf.client.common.annotations.DisconfFileItem;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@ConfigurationProperties(prefix="biz")
+@Component
+@DisconfFile(fileName = "biz.properties")
 public class BizConfig {
 
     private String ldapUrl;
@@ -22,6 +26,7 @@ public class BizConfig {
     
     private boolean phoneMonitorOn;
 
+    @DisconfFileItem(name = "biz.ldapUrl")
     public String getLdapUrl() {
         return ldapUrl;
     }
@@ -30,6 +35,7 @@ public class BizConfig {
         this.ldapUrl = ldapUrl;
     }
 
+    @DisconfFileItem(name = "biz.smsUrl")
     public String getSmsUrl() {
         return smsUrl;
     }
@@ -38,6 +44,7 @@ public class BizConfig {
         this.smsUrl = smsUrl;
     }
 
+    @DisconfFileItem(name = "biz.domain")
     public String getDomain() {
         return domain;
     }
@@ -46,6 +53,7 @@ public class BizConfig {
         this.domain = domain;
     }
 
+    @DisconfFileItem(name = "biz.env")
     public String getEnv() {
         return env;
     }
@@ -54,6 +62,7 @@ public class BizConfig {
         this.env = env;
     }
 
+    @DisconfFileItem(name = "biz.phoneMonitorOn")
     public boolean isPhoneMonitorOn() {
         return phoneMonitorOn;
     }

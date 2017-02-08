@@ -10,8 +10,10 @@ package com.ymatou.datamonitor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.dao.PersistenceExceptionTranslationAutoConfiguration;
+import org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaBaseConfiguration;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -23,13 +25,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 
-//@SpringBootApplication
 @EnableAspectJAutoProxy
 @Configuration
 @EnableAutoConfiguration
-        (exclude = {DataSourceAutoConfiguration.class
-                ,DataSourceTransactionManagerAutoConfiguration.class
-                ,JpaBaseConfiguration.class, HibernateJpaAutoConfiguration.class, PersistenceExceptionTranslationAutoConfiguration.class
+        (exclude = {DataSourceAutoConfiguration.class ,DataSourceTransactionManagerAutoConfiguration.class,
+                JpaBaseConfiguration.class, HibernateJpaAutoConfiguration.class, PersistenceExceptionTranslationAutoConfiguration.class,
+                MongoAutoConfiguration.class,MongoDataAutoConfiguration.class
         })
 @ComponentScan(basePackages = "com.ymatou",
         excludeFilters = {

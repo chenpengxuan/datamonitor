@@ -6,18 +6,15 @@
  */
 package com.ymatou.datamonitor.contoller;
 
-import com.ymatou.datamonitor.model.DataSourceEnum;
+import com.ymatou.datamonitor.config.monitor.DataSourceCollections;
+import com.ymatou.datamonitor.service.MonitorService;
+import com.ymatou.datamonitor.util.WapperUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ymatou.datamonitor.service.MonitorService;
-import com.ymatou.datamonitor.util.WapperUtil;
-
-import static com.ymatou.datamonitor.config.DbUtil.datasourceMap;
 
 /**
  * 
@@ -36,7 +33,7 @@ public class DbSourceController {
     @RequestMapping(path = "/getAll")
     public Object getAll(){
 
-        return WapperUtil.success(datasourceMap.keySet());
+        return WapperUtil.success(DataSourceCollections.getDbMap().keySet());
     }
     
 

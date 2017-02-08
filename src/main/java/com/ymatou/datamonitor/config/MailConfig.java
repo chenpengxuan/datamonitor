@@ -1,11 +1,11 @@
 package com.ymatou.datamonitor.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import com.baidu.disconf.client.common.annotations.DisconfFile;
+import com.baidu.disconf.client.common.annotations.DisconfFileItem;
+import org.springframework.stereotype.Component;
 
-/**
- * @author knightliao
- */
-@ConfigurationProperties(prefix="email")
+@Component
+@DisconfFile(fileName = "mail.properties")
 public class MailConfig {
 
     private String emailHost;
@@ -16,6 +16,7 @@ public class MailConfig {
     private String emailReceiver;
     private boolean emailMonitorOn;
 
+    @DisconfFileItem(name = "email.emailHost")
     public String getEmailHost() {
         return emailHost;
     }
@@ -24,6 +25,7 @@ public class MailConfig {
         this.emailHost = emailHost;
     }
 
+    @DisconfFileItem(name = "email.emailPassword")
     public String getEmailPassword() {
         return emailPassword;
     }
@@ -32,6 +34,7 @@ public class MailConfig {
         this.emailPassword = emailPassword;
     }
 
+    @DisconfFileItem(name = "email.emailUser")
     public String getEmailUser() {
         return emailUser;
     }
@@ -40,6 +43,7 @@ public class MailConfig {
         this.emailUser = emailUser;
     }
 
+    @DisconfFileItem(name = "email.emailPort")
     public String getEmailPort() {
         return emailPort;
     }
@@ -48,6 +52,7 @@ public class MailConfig {
         this.emailPort = emailPort;
     }
 
+    @DisconfFileItem(name = "email.fromEmail")
     public String getFromEmail() {
         return fromEmail;
     }
@@ -56,6 +61,7 @@ public class MailConfig {
         this.fromEmail = fromEmail;
     }
 
+    @DisconfFileItem(name = "email.emailMonitorOn")
     public boolean isEmailMonitorOn() {
         return emailMonitorOn;
     }

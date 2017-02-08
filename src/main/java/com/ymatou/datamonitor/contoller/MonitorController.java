@@ -3,6 +3,8 @@
  */
 package com.ymatou.datamonitor.contoller;
 
+import com.ymatou.datamonitor.config.monitor.DataSourceCollections;
+import com.ymatou.datamonitor.model.DbTypeEnum;
 import com.ymatou.datamonitor.model.pojo.Monitor;
 import com.ymatou.datamonitor.util.Converter;
 import org.quartz.CronExpression;
@@ -24,6 +26,8 @@ import com.ymatou.datamonitor.util.WapperUtil;
 
 import java.text.ParseException;
 
+import static com.ymatou.datamonitor.model.DbTypeEnum.MongoDB;
+
 /**
  * 
  * @author qianmin 2016年8月18日 下午2:41:41
@@ -41,7 +45,8 @@ public class MonitorController {
     @RequestMapping(path = "/add", method = RequestMethod.POST,
             consumes="application/json",produces="application/json")
     public Object addMonitor(@RequestBody MonitorVo monitorVo){
-        if(!monitorVo.getSql().toLowerCase().startsWith("select")){
+        DbTypeEnum dbTypeEnum = DbTypeEnum.valueOf(DataSourceCollections.getDbMap().get(monitorVo.getDbSource()));
+        if(!dbTypeEnum.equals(MongoDB) && !monitorVo.getSql().toLowerCase().startsWith("select")){
             return WapperUtil.error("SQL只允许SELECT!");
         }
         try{
@@ -63,7 +68,8 @@ public class MonitorController {
     @RequestMapping(path = "/modify", method = RequestMethod.POST,
             consumes="application/json",produces="application/json")
     public Object modifyMonitor(@RequestBody MonitorVo monitorVo){
-        if(!monitorVo.getSql().toLowerCase().startsWith("select")){
+        DbTypeEnum dbTypeEnum = DbTypeEnum.valueOf(DataSourceCollections.getDbMap().get(monitorVo.getDbSource()));
+        if(!dbTypeEnum.equals(MongoDB) && !monitorVo.getSql().toLowerCase().startsWith("select")){
             return WapperUtil.error("SQL只允许SELECT!");
         }
         try{

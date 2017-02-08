@@ -3,17 +3,22 @@
  */
 package com.ymatou.datamonitor.service.impl;
 
-import static com.ymatou.datamonitor.util.Constants.JOB_SPEC;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.transaction.Transactional;
-
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.ImmutableMap;
+import com.mongodb.*;
+import com.ymatou.datamonitor.config.monitor.DataSourceCollections;
+import com.ymatou.datamonitor.dao.jpa.MonitorRepository;
+import com.ymatou.datamonitor.dao.mapper.MonitorMapper;
+import com.ymatou.datamonitor.model.DbTypeEnum;
+import com.ymatou.datamonitor.model.RunStatusEnum;
+import com.ymatou.datamonitor.model.StatusEnum;
+import com.ymatou.datamonitor.model.pojo.Monitor;
+import com.ymatou.datamonitor.model.vo.MonitorVo;
+import com.ymatou.datamonitor.service.ExecLogService;
+import com.ymatou.datamonitor.service.MonitorService;
+import com.ymatou.datamonitor.service.SchedulerService;
 import com.ymatou.datamonitor.util.Constants;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.SchedulerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,22 +30,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.alibaba.druid.sql.PagerUtils;
-import com.alibaba.fastjson.JSON;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
-import com.ymatou.datamonitor.config.DbUtil;
-import com.ymatou.datamonitor.dao.jpa.MonitorRepository;
-import com.ymatou.datamonitor.dao.mapper.MonitorMapper;
-import com.ymatou.datamonitor.model.DataSourceEnum;
-import com.ymatou.datamonitor.model.DbEnum;
-import com.ymatou.datamonitor.model.RunStatusEnum;
-import com.ymatou.datamonitor.model.StatusEnum;
-import com.ymatou.datamonitor.model.pojo.Monitor;
-import com.ymatou.datamonitor.model.vo.MonitorVo;
-import com.ymatou.datamonitor.service.ExecLogService;
-import com.ymatou.datamonitor.service.MonitorService;
-import com.ymatou.datamonitor.service.SchedulerService;
+import javax.transaction.Transactional;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.*;
+
+import static com.ymatou.datamonitor.util.Constants.JOB_SPEC;
+import static com.ymatou.datamonitor.util.Constants.MONGO_SCRIPT_TEMPLATE;
 
 /**
  * 
@@ -157,44 +153,59 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
 
     @Override
     public void runNow(MonitorVo monitor,Boolean isSystemRun) {
-
-        //处理sql 等
-        DataSourceEnum dataSourceEnum = DataSourceEnum.valueOf(monitor.getDbSource());
-
-        List<Map<String, Object>> result = Lists.newArrayList();
-        String sql = "";
         logger.info("begin run monitor");
+        JdbcTemplate jdbcTemplate = null;
+        TreeSet<String> wholeKeys = new TreeSet<>();
+        List<Map<String, Object>> result = new ArrayList<>();
+        String sql = monitor.getSql();
 
-        JdbcTemplate jdbcTemplate = DbUtil.getJdbcTemplate(monitor.getDbSource());
         try {
-            if(dataSourceEnum.getDbEnum() != DbEnum.mongodb){
-                sql= monitor.getSql();
-//                String countSql = PagerUtils.count(sql,dataSourceEnum.getDbEnum().name());
-//
-//                Long count = jdbcTemplate.queryForObject(countSql,Long.class);
-//                if(count > 1000){
-//                    sql = PagerUtils.limit(sql,dataSourceEnum.getDbEnum().name(),0,1000);
-//                }
-                if(dataSourceEnum.getDbEnum() == DbEnum.sqlserver){
+            String dbName = monitor.getDbSource();
+            DbTypeEnum dbTypeEnum = DbTypeEnum.valueOf(DataSourceCollections.getDbMap().get(dbName));
+
+            switch (dbTypeEnum){
+                case SQLServer:
+                    jdbcTemplate = DataSourceCollections.getJdbcTemplate(dbName);
                     sql = String.format(Constants.LIMIT_MSSQL_TEMPLATE, sql);
-                }else {
+                    result = jdbcTemplate.queryForList(sql);
+                    break;
+                case MySQL:
+                    jdbcTemplate = DataSourceCollections.getJdbcTemplate(dbName);
                     sql = String.format(Constants.LIMIT_MYSQL_TEMPLATE, sql);
-                }
-                result = jdbcTemplate.queryForList(sql);
-            }else {
-                throw new RuntimeException("暂不支持mongodb");
+                    result = jdbcTemplate.queryForList(sql);
+                    break;
+                case MongoDB:
+                    DB db = DataSourceCollections.getMongoDbFactory(dbName).getDb();
+                    DBObject command = new BasicDBObject();
+                    command.put("eval", String.format(MONGO_SCRIPT_TEMPLATE, StringUtils.trim(sql)));
+                    CommandResult commandResult = db.command(command);
+                    BasicDBList basicDBList = (BasicDBList) commandResult.get("retval");
+                    for(Object o : basicDBList){
+                        Map tempMap = ((BasicDBObject)o).toMap();
+                        Set<String> keys = tempMap.keySet();
+                        wholeKeys.addAll(keys);
+                        HashMap<String, Object> resultMap = new HashMap<>();
+                        for(String key : keys){
+                            resultMap.put(key, tempMap.get(key));
+                        }
+                        result.add(resultMap);
+                        System.out.println(JSON.toJSONString(resultMap));
+                    }
+                    break;
             }
         } catch (Exception e) {
             //出现异常 比如查询超时等 日志需要记录下来
-            result.add(ImmutableMap.of("sql",sql,"error",getPrintStackTraceMessage(e)));
+            logger.error("query error.", e);
+            result.add(ImmutableMap.of("script",sql,"error",getPrintStackTraceMessage(e)));
             monitor.setQueryError(true);
         }
         logger.info("end run monitor");
 
         final List<Map<String, Object>> resultFinal = result;
+        final Set<String> keys = wholeKeys;
         transactionTemplate.execute(status -> {
             //处理返回值
-            execLogService.saveLogAndDecideNotity(monitor, resultFinal);
+            execLogService.saveLogAndDecideNotity(monitor, resultFinal, keys);
             Monitor m = MonitorVo.to(monitor);
             m.setLastFireTime(new Date());
             if (isSystemRun) {
@@ -221,6 +232,7 @@ public class MonitorServiceImpl  extends BaseServiceImpl<Monitor> implements Mon
         }
         return str;
     }
+
     @Override
     public Page<MonitorVo> listMonitor(MonitorVo monitorVo, Pageable pageable) {
 

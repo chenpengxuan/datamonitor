@@ -10,6 +10,8 @@ package com.ymatou.datamonitor.model;
 /**
  * @author luoshiqian 2016/8/18 10:43
  */
-public enum DbEnum {
-    mysql,sqlserver,mongodb
+public enum DbTypeEnum {
+    MySQL,
+    SQLServer,
+    MongoDB
 }

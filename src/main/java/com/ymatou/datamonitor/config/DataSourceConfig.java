@@ -6,11 +6,9 @@
 
 package com.ymatou.datamonitor.config;
 
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
+import com.alibaba.druid.pool.DruidDataSource;
 import com.ymatou.common.mybatis.annotation.MyBatisDao;
+import com.ymatou.common.mybatis.interceptor.PaginationInterceptor;
 import com.ymatou.common.mybatis.typehandler.SerializableTypeHandler;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -19,9 +17,9 @@ import org.hibernate.jpa.HibernatePersistenceProvider;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -36,8 +34,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 import org.springframework.util.StringUtils;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.ymatou.common.mybatis.interceptor.PaginationInterceptor;
+import javax.sql.DataSource;
+import java.util.Properties;
 
 
 @Configuration
@@ -45,9 +43,9 @@ import com.ymatou.common.mybatis.interceptor.PaginationInterceptor;
 @EnableJpaRepositories(basePackages = "com.ymatou.datamonitor.dao.jpa")
 @EnableJpaAuditing
 @EnableTransactionManagement(proxyTargetClass = true)
-@EnableConfigurationProperties({ConnectionConfig.class,BizConfig.class, MailConfig.class})
-public class DataSourceConfig
-        implements TransactionManagementConfigurer {
+@DependsOn("disconfMgrBean2")
+public class DataSourceConfig implements TransactionManagementConfigurer {
+
     @Autowired
     private ConnectionConfig connectionConfig;
 

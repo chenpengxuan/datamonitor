@@ -11,11 +11,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import com.alibaba.fastjson.JSON;
 import com.ymatou.datamonitor.model.pojo.User;
 import com.ymatou.datamonitor.util.CurrentUserUtil;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -60,7 +62,7 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
     }
 
     @Override
-    public void saveLogAndDecideNotity(MonitorVo monitor, List<Map<String, Object>> result) {
+    public void saveLogAndDecideNotity(MonitorVo monitor, List<Map<String, Object>> result, Set<String> keys) {
         ExecLog execLog = new ExecLog();
 
         execLog.setExecTime(new Date());
@@ -89,7 +91,7 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         //处理邮件 或短信
         if((null != monitor.getEmailThreshold() && resultCount > monitor.getEmailThreshold() 
                 && mailConfig.isEmailMonitorOn()) || monitor.isQueryError()){
-            String html = generateHtml(monitor, resultCount, result);
+            String html = generateHtml(monitor, resultCount, result, keys);
             integrationService.sendHtmlEmail(monitor.getEmails(), monitor.getNotifyTitle(), html);
         }
 
@@ -102,7 +104,7 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
         }
     }
     
-    private String generateHtml(MonitorVo monitor, long resultCount, List<Map<String, Object>> result){
+    private String generateHtml(MonitorVo monitor, long resultCount, List<Map<String, Object>> result, Set<String> keys){
         StringBuilder sb = new StringBuilder();
         sb.append("<!DOCTYPE html><html><head>")
           .append("<meta charset='utf-8'><meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>")
@@ -111,20 +113,28 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
                   bizConfig.getEnv(), monitor.getName(), new SimpleDateFormat("yyyyMMdd HH:mm:ss").format(new Date()), 
                   monitor.getEmailThreshold(), resultCount))
           .append("</h3><table border='1'><tr>");
-        for(Entry<String, Object> entry : result.get(0).entrySet()){
-            sb.append("<td>").append(StringUtils.isBlank(entry.getKey()) ? "count" : entry.getKey()).append("</td>");
+        if(CollectionUtils.isNotEmpty(keys)){
+            for (String key : keys) {
+                sb.append("<td>").append(key).append("</td>");
+            }
+        }else {
+            for (Entry<String, Object> entry : result.get(0).entrySet()) {
+                sb.append("<td>").append(StringUtils.isBlank(entry.getKey()) ? "count" : entry.getKey()).append("</td>");
+            }
         }
         sb.append("</tr>");
-        
+
+        Set<String> realKeys = CollectionUtils.isNotEmpty(keys) ? keys : result.get(0).keySet();
         for(int index = 0; index < result.size(); index++){
             sb.append("<tr>");
-            for(Entry<String, Object> entry : result.get(index).entrySet()){
-                if(entry.getValue() instanceof Date){
+            Map<String, Object> temp = result.get(index);
+            for(String key : realKeys){
+                if(temp.get(key) instanceof Date){
                     sb.append("<td>")
-                      .append(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format((Date) entry.getValue()))
-                      .append("</td>");
+                            .append(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format((Date) temp.get(key)))
+                            .append("</td>");
                 }else{
-                    sb.append("<td>").append(entry.getValue()).append("</td>");
+                    sb.append("<td>").append(temp.get(key)).append("</td>");
                 }
             }
             sb.append("</tr>");

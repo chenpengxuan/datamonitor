@@ -12,7 +12,7 @@ buildscript {
         maven { url "http://repo.spring.io/snapshot" }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.6.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
         classpath "org.springframework:springloaded:1.2.3.RELEASE"
     }
 }
@@ -35,7 +35,7 @@ jar {
 }
 
 ext {
-    springBootVersion = "1.3.6.RELEASE"
+    springBootVersion = "1.4.3.RELEASE"
     mybatisVersion = "3.2.8"
     mybatisSpringVersion = "1.2.2"
     fastJsonVersion = "1.2.6"
@@ -43,9 +43,9 @@ ext {
     httpClientVersion = "4.3.5"
     mysqlVersion = "5.1.31"
     jtdsVersion = "1.3.1"
-    jacksonVersion = "2.4.6"
+    jacksonVersion = "2.8.6"
     apacheCommonVersion = "3.4"
-    snakeyamlVersion = "1.2.4.RELEASE"
+    snakeyamlVersion = "1.9"
     shiroVersion = "1.2.3"
     guavaVersion = "19.0"
     rxJavaVersion = "1.1.9"
@@ -53,10 +53,13 @@ ext {
     junitVersion = "4.11"
     quartzVersion = "2.2.3"
     javaxMailVersion = "1.4.7"
+    disconfVersion = "2.6.39"
+    springDataMongoVersion = "1.9.2.RELEASE"
+    springDataCommonsVersion = "1.12.6.RELEASE"
+    mongoDriverVerson = "3.2.2"
 }
 
 configurations {
-
     compile.exclude group: "org.eclipse.jetty.websocket"
     compile.exclude group: "org.yaml"
     compile.exclude module:"c3p0"
@@ -99,19 +102,20 @@ dependencies {
     compile "org.mybatis:mybatis-spring:${mybatisSpringVersion}"
     compile "org.springframework.boot:spring-boot-starter-jdbc:${springBootVersion}"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-
 	compile "org.springframework.boot:spring-boot-starter-aop:${springBootVersion}"
 	compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-
     compile "org.springframework.boot:spring-boot-starter-tomcat:${springBootVersion}"
     compile "org.springframework:spring-context-support"
-    
+    compile "org.springframework.data:spring-data-mongodb:${springDataMongoVersion}"
+//    compile "org.springframework.data:spring-data-jpa:1.10.6.RELEASE"
+    compile "org.mongodb:mongo-java-driver:${mongoDriverVerson}"
+
     compile "org.quartz-scheduler:quartz:${quartzVersion}"
     compile "javax.mail:mail:${javaxMailVersion}"
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile group: "junit", name: "junit", version: "${junitVersion}"
-
+    compile "com.ymatou.disconf:disconf-client:${disconfVersion}"
 }
 
 
