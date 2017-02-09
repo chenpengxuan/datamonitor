@@ -44,12 +44,11 @@ public class MongoConfigUpdateService implements IDisconfUpdate {
         do {
             String dbUrl = (String) props.get(URL.replace("&", String.valueOf(index)));
             String dbName = (String) props.get(NAME.replace("&", String.valueOf(index)));
-            List<String> tags = PatternUtils.findMatchedTagNames(dbUrl);
-            if(CollectionUtils.isNotEmpty(tags)){
-                 StringUtils.replace(dbUrl, "${" + tags.get(0) + "}", AppTagHelper.TAG_STORE.get(tags.get(0)));
-            }
-
             if (StringUtils.isNotBlank(dbUrl) && StringUtils.isNotBlank(dbName)) {
+                List<String> tags = PatternUtils.findMatchedTagNames(dbUrl);
+                if(CollectionUtils.isNotEmpty(tags)){
+                    StringUtils.replace(dbUrl, "${" + tags.get(0) + "}", AppTagHelper.TAG_STORE.get(tags.get(0)));
+                }
                 SimpleMongoDbFactory mongoDbFactory = DbUtil.newMongoDbFactory(new MongoProperties(dbUrl, dbName));
                 DataSourceCollections.addMongoDataBase(dbName, mongoDbFactory);
                 flag = true;

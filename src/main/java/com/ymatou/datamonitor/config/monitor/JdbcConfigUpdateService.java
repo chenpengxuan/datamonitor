@@ -52,12 +52,13 @@ public class JdbcConfigUpdateService implements IDisconfUpdate{
             String dbType = (String) props.get(TYPE.replace("&", String.valueOf(index)));
             String userName = (String) props.get(USER_NAME.replace("&", String.valueOf(index)));
             String password = (String) props.get(PASSWORD.replace("&", String.valueOf(index)));
-            List<String> tags = PatternUtils.findMatchedTagNames(password);
-            if(CollectionUtils.isNotEmpty(tags)){
-                StringUtils.replace(password, "${" + tags.get(0) + "}", AppTagHelper.TAG_STORE.get(tags.get(0)));
-            }
+
             if (StringUtils.isNotBlank(dbUrl) && StringUtils.isNotBlank(dbName) && StringUtils.isNotBlank(dbType)
                     && StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) {
+                List<String> tags = PatternUtils.findMatchedTagNames(password);
+                if(CollectionUtils.isNotEmpty(tags)){
+                    StringUtils.replace(password, "${" + tags.get(0) + "}", AppTagHelper.TAG_STORE.get(tags.get(0)));
+                }
                 JdbcProperties jdbcProperties = new JdbcProperties(dbName,dbType, dbUrl, userName, password);
                 DruidDataSource dataSource = DbUtil.newDataSource(jdbcProperties);
                 DataSourceCollections.addDataBase(jdbcProperties.getDbName(), jdbcProperties.getDbType(), dataSource);
