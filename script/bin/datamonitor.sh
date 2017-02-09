@@ -2,9 +2,11 @@
 
 source "/etc/profile"
 GCLOGPATH="logs/gc.log"
+DISCONF_ENV=$1
 MAIN_CLASS="com.ymatou.datamonitor.Application"
 CLASS_PATH="lib/*:conf"
-JAVA_OPTS="-Xms1024M -Xmx1024M -Xmn380M \
+JAVA_OPTS=" -Ddisconf.env=${DISCONF_ENV}
+    -Xms1024M -Xmx1024M -Xmn380M \
     -XX:+UseConcMarkSweepGC -XX:+UseCMSInitiatingOccupancyOnly -XX:CMSInitiatingOccupancyFraction=75 \
     -XX:+PrintGCDetails -XX:+PrintGCDateStamps -verbose:gc -XX:+DisableExplicitGC"
 

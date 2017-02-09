@@ -26,6 +26,8 @@ public class BizConfig {
     
     private boolean phoneMonitorOn;
 
+    private int serverPort;
+
     @DisconfFileItem(name = "biz.ldapUrl")
     public String getLdapUrl() {
         return ldapUrl;
@@ -65,6 +67,15 @@ public class BizConfig {
     @DisconfFileItem(name = "biz.phoneMonitorOn")
     public boolean isPhoneMonitorOn() {
         return phoneMonitorOn;
+    }
+
+    @DisconfFileItem(name = "server.port")
+    public int getServerPort() {
+        return serverPort;
+    }
+
+    public void setServerPort(int serverPort) {
+        this.serverPort = serverPort;
     }
 
     public void setPhoneMonitorOn(boolean phoneMonitorOn) {

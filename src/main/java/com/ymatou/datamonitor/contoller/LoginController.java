@@ -117,7 +117,7 @@ public class LoginController {
     
     @RequestMapping("/version")
     public String version() {
-        return "2016-08-05";
+        return "2017-02-08";
     }
     
     @RequestMapping("/warmup")
