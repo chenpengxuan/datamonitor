@@ -31,7 +31,11 @@ springBoot {
 
 jar {
     baseName = "datamonitor"
-    exclude('application.properties')
+    exclude('biz.properties')
+    exclude('db.properties')
+    exclude('jdbc.properties')
+    exclude('mongo.properties')
+    exclude('mail.properties')
 }
 
 ext {
