@@ -11,11 +11,11 @@ import com.baidu.disconf.client.common.annotations.DisconfFile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@ConfigurationProperties(locations = "classpath:jdbc.properties", prefix="jdbc")
 @DisconfFile(fileName = "jdbc.properties")
 public class JdbcConfig {
 
@@ -27,5 +27,11 @@ public class JdbcConfig {
 
     public void setConfigs(List<JdbcProperties> configs) {
         this.configs = configs;
+    }
+
+    @PostConstruct
+    public void init() throws Exception {
+        JdbcConfigUpdateService service = new JdbcConfigUpdateService();
+        service.reload();
     }
 }

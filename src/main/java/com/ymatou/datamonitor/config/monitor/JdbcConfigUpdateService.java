@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -26,6 +27,11 @@ import java.util.Properties;
 public class JdbcConfigUpdateService implements IDisconfUpdate{
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcConfigUpdateService.class);
+    private static final String NAME = "jdbc.configs[&].dbName";
+    private static final String URL = "jdbc.configs[&].url";
+    private static final String TYPE = "jdbc.configs[&].dbType";
+    private static final String USER_NAME = "jdbc.configs[&].username";
+    private static final String PASSWORD = "jdbc.configs[&].password";
 
     @Override
     public void reload() throws Exception {
@@ -56,12 +62,6 @@ public class JdbcConfigUpdateService implements IDisconfUpdate{
 
         logger.info("jdbc properties reload.");
     }
-
-    private static final String NAME = "jdbc.configs[&].dbName";
-    private static final String URL = "jdbc.configs[&].url";
-    private static final String TYPE = "jdbc.configs[&].dbType";
-    private static final String USER_NAME = "jdbc.configs[&].username";
-    private static final String PASSWORD = "jdbc.configs[&].password";
 
     public void clearMap(){
         DataSourceCollections.datasourceMap.values().forEach(e ->

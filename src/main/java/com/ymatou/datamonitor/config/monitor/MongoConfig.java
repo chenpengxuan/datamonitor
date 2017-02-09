@@ -4,13 +4,13 @@ import com.baidu.disconf.client.common.annotations.DisconfFile;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
  * Created by qianmin on 2017/1/23.
  */
 @Component
-@ConfigurationProperties(locations = "mongo.properties", prefix="mongo")
 @DisconfFile(fileName = "mongo.properties")
 public class MongoConfig {
 
@@ -22,5 +22,11 @@ public class MongoConfig {
 
     public void setConfigs(List<MongoProperties> configs) {
         this.configs = configs;
+    }
+
+    @PostConstruct
+    public void init() throws Exception {
+        MongoConfigUpdateService service = new MongoConfigUpdateService();
+        service.reload();
     }
 }

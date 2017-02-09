@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
@@ -24,6 +25,8 @@ import java.util.Properties;
 public class MongoConfigUpdateService implements IDisconfUpdate {
 
     private static final Logger logger = LoggerFactory.getLogger(MongoConfigUpdateService.class);
+    private static final String URL = "mongo.configs[&].dbUrl";
+    private static final String NAME = "mongo.configs[&].dbName";
 
     @Override
     public void reload() throws Exception {
@@ -49,9 +52,6 @@ public class MongoConfigUpdateService implements IDisconfUpdate {
 
         logger.info("mongo properties reload.");
     }
-
-    private static final String URL = "mongo.configs[&].dbUrl";
-    private static final String NAME = "mongo.configs[&].dbName";
 
     public void clearMap() {
         DataSourceCollections.mongoDbFactoryMap.values().forEach(dbFactory -> {
