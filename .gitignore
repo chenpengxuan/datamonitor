@@ -11,3 +11,4 @@ build
 *.iml
 /bin/
 .settings/*
+/src/main/resources/disconf.properties

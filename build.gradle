@@ -57,7 +57,7 @@ ext {
     junitVersion = "4.11"
     quartzVersion = "2.2.3"
     javaxMailVersion = "1.4.7"
-    disconfVersion = "2.6.39"
+    disconfVersion = "2.6.40"
     springDataMongoVersion = "1.9.2.RELEASE"
     springDataCommonsVersion = "1.12.6.RELEASE"
     mongoDriverVerson = "3.2.2"

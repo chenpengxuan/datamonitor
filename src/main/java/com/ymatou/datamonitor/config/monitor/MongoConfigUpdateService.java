@@ -5,6 +5,7 @@ import com.baidu.disconf.client.common.annotations.DisconfUpdateService;
 import com.baidu.disconf.client.common.update.IDisconfUpdate;
 import com.baidu.disconf.client.utils.AppTagHelper;
 import com.baidu.disconf.client.utils.PatternUtils;
+import com.baidu.disconf.client.utils.TagPlaceholderHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -45,10 +46,7 @@ public class MongoConfigUpdateService implements IDisconfUpdate {
             String dbUrl = (String) props.get(URL.replace("&", String.valueOf(index)));
             String dbName = (String) props.get(NAME.replace("&", String.valueOf(index)));
             if (StringUtils.isNotBlank(dbUrl) && StringUtils.isNotBlank(dbName)) {
-                List<String> tags = PatternUtils.findMatchedTagNames(dbUrl);
-                if(CollectionUtils.isNotEmpty(tags)){
-                    StringUtils.replace(dbUrl, "${" + tags.get(0) + "}", AppTagHelper.TAG_STORE.get(tags.get(0)));
-                }
+                dbUrl = TagPlaceholderHelper.replaceTag(dbUrl);
                 SimpleMongoDbFactory mongoDbFactory = DbUtil.newMongoDbFactory(new MongoProperties(dbUrl, dbName));
                 DataSourceCollections.addMongoDataBase(dbName, mongoDbFactory);
                 flag = true;

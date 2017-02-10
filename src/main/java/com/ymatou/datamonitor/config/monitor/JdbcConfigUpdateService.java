@@ -6,6 +6,7 @@ import com.baidu.disconf.client.common.annotations.DisconfUpdateService;
 import com.baidu.disconf.client.common.update.IDisconfUpdate;
 import com.baidu.disconf.client.utils.AppTagHelper;
 import com.baidu.disconf.client.utils.PatternUtils;
+import com.baidu.disconf.client.utils.TagPlaceholderHelper;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,8 +43,8 @@ public class JdbcConfigUpdateService implements IDisconfUpdate{
         File mongoFile = DisConf.getLocalConfig("jdbc.properties");
         Properties props = new Properties();
         props.load(new FileInputStream(mongoFile));
-
         clearMap();
+
         int index = 0;
         boolean flag = false;
         do {
@@ -55,10 +56,7 @@ public class JdbcConfigUpdateService implements IDisconfUpdate{
 
             if (StringUtils.isNotBlank(dbUrl) && StringUtils.isNotBlank(dbName) && StringUtils.isNotBlank(dbType)
                     && StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(password)) {
-                List<String> tags = PatternUtils.findMatchedTagNames(password);
-                if(CollectionUtils.isNotEmpty(tags)){
-                    StringUtils.replace(password, "${" + tags.get(0) + "}", AppTagHelper.TAG_STORE.get(tags.get(0)));
-                }
+                password = TagPlaceholderHelper.replaceTag(password);
                 JdbcProperties jdbcProperties = new JdbcProperties(dbName,dbType, dbUrl, userName, password);
                 DruidDataSource dataSource = DbUtil.newDataSource(jdbcProperties);
                 DataSourceCollections.addDataBase(jdbcProperties.getDbName(), jdbcProperties.getDbType(), dataSource);
