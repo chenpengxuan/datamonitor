@@ -131,7 +131,7 @@ public class ExecLogServiceImpl extends BaseServiceImpl<ExecLog> implements Exec
             for(String key : realKeys){
                 if(temp.get(key) instanceof Date){
                     sb.append("<td>")
-                            .append(new SimpleDateFormat("yyyy/MM/dd hh:mm:ss").format((Date) temp.get(key)))
+                            .append(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format((Date) temp.get(key)))
                             .append("</td>");
                 }else{
                     sb.append("<td>").append(temp.get(key)).append("</td>");
