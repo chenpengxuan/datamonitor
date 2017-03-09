@@ -107,7 +107,7 @@ public class KafkaMonitorController {
                     logger.info("cluster :{},group:{} recovered", cluster, group);
                     String title = "kafka 监控 cluster:" + cluster + "; group:" + group + " recovered";
 
-//                    integrationService.sendMessage(bizConfig.getKafkaMonitorPhones(), title);
+                    integrationService.sendMessage(bizConfig.getKafkaMonitorPhones(), title);
                     integrationService.sendHtmlEmail(bizConfig.getKafkaMonitorEmails(), title, title);
                 });
             }

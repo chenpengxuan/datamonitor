@@ -51,10 +51,10 @@ public class KafkaMonitorUtil {
 
             try {
                 StringBuilder sb = new StringBuilder();
-                boolean isSendPhone = ALERT_EVENT_MAP.values().stream()
-                        .map(KafkaAlertEventVo::getEvent)
-                        .flatMap(consumerGroupStatus -> consumerGroupStatus.getPartitions().stream())
-                        .anyMatch(consumerTopicPartition -> consumerTopicPartition.getEnd().getLag() > 0);
+//                boolean isSendPhone = ALERT_EVENT_MAP.values().stream()
+//                        .map(KafkaAlertEventVo::getEvent)
+//                        .flatMap(consumerGroupStatus -> consumerGroupStatus.getPartitions().stream())
+//                        .anyMatch(consumerTopicPartition -> consumerTopicPartition.getEnd().getLag() > 1000);
                 ALERT_EVENT_MAP.values().stream().forEach(kafkaAlertEventVo -> {
                     String cluster = kafkaAlertEventVo.getCluster();
                     String group = kafkaAlertEventVo.getGroup();
@@ -77,9 +77,9 @@ public class KafkaMonitorUtil {
                     title = "kafka监控出现堆积:" + title;
                     String emailContent = title + " <br/><br/><br/>" + JSON.toJSONString(ALERT_EVENT_MAP);
                     integrationService.sendHtmlEmail(bizConfig.getKafkaMonitorEmails(), title, emailContent);
-                    if(isSendPhone){
+//                    if(isSendPhone){
                         integrationService.sendMessage(bizConfig.getKafkaMonitorPhones(), title);
-                    }
+//                    }
                     LOGGER.info(emailContent);
                 }
             } catch (Exception e) {
@@ -91,7 +91,7 @@ public class KafkaMonitorUtil {
                 ALERT_EVENT_MAP.clear();
             }
 
-        }, 0L, 30L, TimeUnit.SECONDS);
+        }, 60L, 60L, TimeUnit.SECONDS);
     }
 
     @PreDestroy
