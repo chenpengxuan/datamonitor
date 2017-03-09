@@ -28,6 +28,9 @@ public class BizConfig {
 
     private int serverPort;
 
+    private String kafkaMonitorEmails;
+    private String kafkaMonitorPhones;
+
     @DisconfFileItem(name = "biz.ldapUrl")
     public String getLdapUrl() {
         return ldapUrl;
@@ -80,5 +83,23 @@ public class BizConfig {
 
     public void setPhoneMonitorOn(boolean phoneMonitorOn) {
         this.phoneMonitorOn = phoneMonitorOn;
+    }
+
+    @DisconfFileItem(name = "biz.kafkaMonitorEmails")
+    public String getKafkaMonitorEmails() {
+        return kafkaMonitorEmails;
+    }
+
+    public void setKafkaMonitorEmails(String kafkaMonitorEmails) {
+        this.kafkaMonitorEmails = kafkaMonitorEmails;
+    }
+
+    @DisconfFileItem(name = "biz.kafkaMonitorPhones")
+    public String getKafkaMonitorPhones() {
+        return kafkaMonitorPhones;
+    }
+
+    public void setKafkaMonitorPhones(String kafkaMonitorPhones) {
+        this.kafkaMonitorPhones = kafkaMonitorPhones;
     }
 }

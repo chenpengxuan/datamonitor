@@ -69,7 +69,7 @@ public class IntegrationServiceImpl implements IntegrationService{
 
         String mailTitle = title.substring(0, Math.min(ALARM_MAIL_TITLE_LENGTH, title.length()));
         String mailFrom = mailConfig.getFromEmail();
-        String[] mailToList = mailTo.split(";");
+        String[] mailToList = mailTo.split("[;]");
         try {
             mailUtil.sendHtmlMail(mailFrom, mailToList, mailTitle, content);
         } catch (Exception e) {
